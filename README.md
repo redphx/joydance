@@ -2,6 +2,9 @@
 
 ![image](https://user-images.githubusercontent.com/96280/163298419-6279f338-069e-4302-971f-b9d2e5fc9f7a.png)
 
+# How does it work?
+It pretends to be the [Just Dance Controller app](https://play.google.com/store/apps/details?id=com.ubisoft.dance.justdance2015companion), sends movements of the Joy-Con to your game console.
+
 # Features
 - Play Just Dance 2017 and later on Xbox/Stadia/PS/NSW with Joy-Cons.
 - No latency.
