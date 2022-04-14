@@ -15,8 +15,8 @@
   - Playstation 4/5 (not tested)
 
 # Requirements
-- [Python 3.7+](https://www.python.org) and [pip](https://pip.pypa.io/en/stable/installation/) installed.
 - PC/Mac/Linux.
+- [Python 3.7+](https://www.python.org) and [pip](https://pip.pypa.io/en/stable/installation/) installed.
 - Bluetooth dongle (because built-in bluetooth sucks).
 - 1 to 6 Joy-Cons. It's RECOMMENED to update Joy-Cons to the latest firmware version & calibrate motion sensors using a Nintendo Switch first (ask your friends or bring it to the game shop if you don't have one).
 
