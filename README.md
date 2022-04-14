@@ -2,14 +2,11 @@
 
 ![image](https://user-images.githubusercontent.com/96280/163298419-6279f338-069e-4302-971f-b9d2e5fc9f7a.png)
 
-## How does it work?
-It pretends to be the [Just Dance Controller app](https://play.google.com/store/apps/details?id=com.ubisoft.dance.justdance2015companion), sends movements of the Joy-Con to your game console.
-
 ## Features
 - Play Just Dance 2017 and later on Xbox/Stadia/PS/NSW with Joy-Cons.
 - Playing with a Joy-Con (+ its strap) is safer and more comfortable than holding a phone.
 - No latency.
-- Better score than using a phone.
+- Better score than using a phone (hopefully).
 - No random disconnection.
 - Support up to 6 players.
 - Support all platforms (in theory):
@@ -17,7 +14,10 @@ It pretends to be the [Just Dance Controller app](https://play.google.com/store/
   - Nintendo Switch
   - Xbox One (not tested)
   - Stadia (not tested)
-  - Playstation 4/5 (not tested)
+  - PlayStation 4/5 (not tested)
+  
+## How does it work?
+It pretends to be the [Just Dance Controller app](https://play.google.com/store/apps/details?id=com.ubisoft.dance.justdance2015companion), sends movements of the Joy-Con to your game console.
 
 ## Tested on
 - JD 2022 on Xbox Series X and JD 2020 on Nintendo Switch.
