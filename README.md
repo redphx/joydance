@@ -31,7 +31,7 @@ Tested on Zero 2 W with 2 Joy-Cons and it worked just fine.
 - [Python 3.7+](https://www.python.org) and [pip](https://pip.pypa.io/en/stable/installation/) installed.
 - 1 to 6 Joy-Cons.
 - It's **RECOMMENDED** to:
-  - Use a Bluetooth dongle, because built-in Bluetooth sucks (it will disconnect constantly while playing). Make sure you buy a dongle with game controllers support, not just for audio devices. Not all dongles support Mac/Linux, so remember to check compatibility before buying.
+  - Use a Bluetooth dongle, because built-in Bluetooth sucks (or you will get disconnected constantly while playing). Make sure you buy a dongle with game controllers support, not just for audio devices. Not all dongles support Mac/Linux, so remember to check compatibility before buying.
   - Use a Nintendo Switch to update Joy-Con to the latest firmware & calibate its motion sensors. Ask your friends or bring it to the game shop if you don't have one.
 
 # Installation
@@ -76,4 +76,41 @@ sudo udevadm trigger
 3. Install [`dkms-hid-nintendo`](https://github.com/nicman23/dkms-hid-nintendo) (Joy-Con driver) if you're running Linux kernel older than 5.16.
 
 # Usage
-...
+
+1. Open the phone pairing screen on Just Dance.
+
+2. Connect your PC/Mac/Linux to the same Wi-Fi network as your game console.
+
+3. Run this command:
+  ```
+  python3 dance.py
+  ```
+
+4. Open http://localhost:32623 in a web browser (32623 = DANCE).
+
+5. Turn on Bluetooth and pair with Joy-Con by holding down the [SYNC button](https://en-americas-support.nintendo.com/app/answers/detail/a_id/22634) until the light move up and down. Press the "Refresh" button until your Joy-Con shows up.
+
+6. Fill the form.
+
+- **Pairing Method**:
+  - Fast:
+    - Only for Xbox One, PlayStation 4/5 and Nintendo Switch.
+    - Requires console's private IP address.
+    - Doesn't require pairing code.
+    - Connect instantly.
+  - Default
+    - Slower, but supports all platforms (including Xbox Series and Stadia).
+    - Requires pairing code.
+    - Requires host's private IP address.
+
+- **Host's Private IP Address**:
+  - The private IP address of your PC/Mac/Linux. Find this in the Wi-Fi settings.
+  - Starts with `192.168`.
+- **Console's Private IP Address**:
+  - The private IP address of your console. Find this in the Wi-Fi settings on console.
+  - Starts with `192.168`.
+- **Pairing Code**: get this from the game.
+
+7. Press the "Connect" button next to Joy-Con to start the pairing process.
+
+8. 🕺💃
