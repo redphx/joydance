@@ -92,24 +92,24 @@ sudo udevadm trigger
 
 6. Fill the form.
 
-- **Pairing Method**:
-  - Fast:
-    - Only for Xbox One, PlayStation 4/5 and Nintendo Switch.
-    - Requires console's private IP address.
-    - Doesn't require pairing code.
-    - Connect instantly.
-  - Default
-    - Slower, but supports all platforms (including Xbox Series and Stadia).
-    - Requires pairing code.
-    - Requires host's private IP address.
+    - **Pairing Method**:
+      - Fast:
+        - Only for Xbox One, PlayStation 4/5 and Nintendo Switch.
+        - Connect instantly.
+        - Doesn't require pairing code.
+        - Requires console's private IP address.
+      - Default
+        - Slower, but supports all platforms (including Xbox Series and Stadia).
+        - Requires pairing code.
+        - Requires host's private IP address.
 
-- **Host's Private IP Address**:
-  - The private IP address of your PC/Mac/Linux. Find this in the Wi-Fi settings.
-  - Starts with `192.168`.
-- **Console's Private IP Address**:
-  - The private IP address of your console. Find this in the Wi-Fi settings on console.
-  - Starts with `192.168`.
-- **Pairing Code**: get this from the game.
+    - **Host's Private IP Address**:
+      - The private IP address of your PC/Mac/Linux. Find this in the Wi-Fi settings.
+      - Starts with `192.168`.
+    - **Console's Private IP Address**:
+      - The private IP address of your console. Find this in the Wi-Fi settings on console.
+      - Starts with `192.168`.
+    - **Pairing Code**: get this from the game.
 
 7. Press the "Connect" button next to Joy-Con to start the pairing process.
 
