@@ -7,6 +7,7 @@ It pretends to be the [Just Dance Controller app](https://play.google.com/store/
 
 # Features
 - Play Just Dance 2017 and later on Xbox/Stadia/PS/NSW with Joy-Cons.
+- Playing with a Joy-Con (+ its strap) is safer and more comfortable than holding a phone.
 - No latency.
 - Better score than using a phone.
 - No random disconnection.
