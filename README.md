@@ -113,4 +113,4 @@ sudo udevadm trigger
 
 7. Press the "Connect" button next to Joy-Con to start the pairing process.
 
-8. 🕺💃
+8. 💃🕺
