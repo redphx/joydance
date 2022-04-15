@@ -82,7 +82,7 @@ sudo udevadm trigger
 
 1. Open the phone pairing screen on Just Dance.
 
-2. Connect your PC/Mac/Linux to the same Wi-Fi network as your game console.
+2. Connect your PC/Mac/Linux to the same Wi-Fi or LAN network as your game console.
 
 3. Run this command:
   ```
