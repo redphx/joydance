@@ -1,0 +1,5 @@
+https://github.com/redphx/joycon-python/archive/refs/heads/master.zip#egg=joycon-python
+websockets==10.2
+aiohttp==3.8.1
+hidapi==0.11.2
+pyglm==2.5.7

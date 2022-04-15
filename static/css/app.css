@@ -1,0 +1,180 @@
+body {
+    max-width: 500px;
+    margin: 10px auto;
+    background-color: #1c1b1f;
+    color: #e1e1e1;
+}
+
+.container {
+    border-radius: 10px;
+    background-color: #272629;
+    padding: 20px;
+    margin: 10px;
+}
+
+.ascii {
+    text-align: center;
+    padding: 8px 0;
+}
+
+.ascii pre {
+    font-family: ui-monospace, 'Segoe UI Mono', 'Roboto Mono', 'Courier New', monospace;
+    display: inline-block;
+    text-align: left;
+    margin: 0;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 10px;
+    color: #FFF;
+}
+
+.flex {
+    display: flex;
+}
+
+.joycons {
+    margin-top: 10px;
+}
+
+.joycons-wrapper button {
+    width: 100%;
+}
+
+.joycons .joycons-wrapper {
+    position: relative;
+}
+
+.joycons .joycons-wrapper .empty {
+    height: 60px;
+    line-height: 60px;
+    margin: auto;
+    text-align: center;
+}
+
+.joycons .joycons-wrapper .joycons-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+
+.joycons .joycons-wrapper .joycons-list li {
+    border-bottom: 1px solid #2f2f2f;
+    padding: 12px 0;
+}
+
+.joycons .joycons-wrapper .joycons-list .joycon-color {
+    width: 35%;
+    margin: auto;
+}
+
+.joycons .joycons-wrapper .joycons-list .joycon-name {
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.joycons .joycons-wrapper .joycons-list .joycon-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.joycons .joycons-wrapper .joycons-list .joycon-info .joycon-state {
+    color: #757575;
+    font-size: 14px;
+    text-align: left;
+}
+
+.joycons-list .pairing-code {
+    border-radius: 4px;
+    font-size: 12px;
+    background-color: #202020;
+    display: inline-block;
+    color: #a6a6a6;
+    padding: 4px;
+    margin: auto;
+}
+
+.joycons .btn-refresh {
+    color: #383000;
+    background-color: #e2c700;
+    margin: auto;
+}
+
+input, select {
+    box-shadow: none !important;
+    border-width: 2px !important;
+}
+
+input:invalid {
+    border-color: #e9322d !important;
+}
+
+input[readonly] {
+    background-color: #ccc !important;
+    color: #000;
+}
+
+#ipAddr, #pairingCode, .joycons-list .pairing-code {
+    font-family: ui-monospace, 'Segoe UI Mono', 'Roboto Mono', 'Courier New', monospace;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 16px;
+}
+
+.footer a {
+    text-decoration: none;
+    color: #424242;
+    font-size: 14px;
+}
+
+.footer a:hover {
+    color: #4d4d4d;
+}
+
+.pure-button-primary {
+    background-color: #1976D2 !important;
+    color: #E3F2FD !important;
+}
+
+.pure-form fieldset {
+    padding-bottom: 0;
+}
+
+.battery-level {
+    display: inline-block;
+    margin-left: 8px;
+}
+
+.battery-level svg {
+    width: 16px;
+    margin: auto;
+    vertical-align: middle;
+}
+
+.battery-level.full > * {
+    fill: #8BC34A;
+}
+
+.battery-level.medium > * {
+    fill: #FFEB3B;
+}
+
+.battery-level.low > * {
+    fill: #FF9800;
+}
+
+.battery-level.critical > * {
+    fill: #FF5722;
+}
+
+.battery-level.medium .battery-bar-4,
+.battery-level.low .battery-bar-3,
+.battery-level.low .battery-bar-4,
+.battery-level.critical .battery-bar-2,
+.battery-level.critical .battery-bar-3,
+.battery-level.critical .battery-bar-4 {
+    display: none;
+}
