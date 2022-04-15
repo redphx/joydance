@@ -89,7 +89,7 @@ sudo udevadm trigger
   python3 dance.py
   ```
 
-4. Open http://localhost:32623 in a web browser (32623 = DANCE).
+4. Open http://localhost:32623 (not https://...) in a web browser (32623 = DANCE).
 
 5. Turn on Bluetooth and pair with Joy-Con by holding down the [SYNC button](https://en-americas-support.nintendo.com/app/answers/detail/a_id/22634) until the light move up and down. Press the "Refresh" button until your Joy-Con shows up.
 
