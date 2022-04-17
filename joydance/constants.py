@@ -1,10 +1,18 @@
 from enum import Enum
 
-
-JOYDANCE_VERSION = '0.1'
+JOYDANCE_VERSION = '0.2'
 UBI_APP_ID = '210da0fb-d6a5-4ed1-9808-01e86f0de7fb'
 UBI_SKU_ID = 'jdcompanion-android'
-WS_SUBPROTOCOL = 'v2.phonescoring.jd.ubisoft.com'
+
+
+class WsSubprotocolVersion(Enum):
+    V1 = 'v1',
+    V2 = 'v2',
+
+
+WS_SUBPROTOCOLS = {}
+WS_SUBPROTOCOLS[WsSubprotocolVersion.V1.value] = 'v1.phonescoring.jd.ubisoft.com'
+WS_SUBPROTOCOLS[WsSubprotocolVersion.V2.value] = 'v2.phonescoring.jd.ubisoft.com'
 
 JOYCON_UPDATE_RATE = 0.02  # 50Hz
 ACCEL_SEND_RATE = 40  # ms

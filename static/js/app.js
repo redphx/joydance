@@ -17,7 +17,8 @@ const BATTERY_LEVEL = {
 
 const PairingMethod = {
     DEFAULT: 'default',
-    FAST: 'fast'
+    FAST: 'fast',
+    OLD: 'old',
 }
 
 const WsCommand = {
@@ -83,8 +84,13 @@ class PairingMethodPicker extends Component {
         return html`
             <label for="stacked-state">Pairing Method</label>
             <select id="stacked-state" onChange=${this.onChange} value=${props.pairing_method}>
-                <option value="${PairingMethod.DEFAULT}">Default: All platforms (incl. Xbox Series/Stadia)</option>
-                <option value="${PairingMethod.FAST}">Fast: Xbox One/PlayStation/Nintendo Switch</option>
+                <optgroup label="JD 2020 and later">
+                    <option value="${PairingMethod.DEFAULT}">Default: All platforms (incl. Xbox Series/Stadia)</option>
+                    <option value="${PairingMethod.FAST}">Fast: Xbox One/PlayStation/Nintendo Switch</option>
+                </optgroup>
+                <optgroup label="JD 2016-2019">
+                    <option value="${PairingMethod.OLD}">Old: All platforms (incl. PC)</option>
+                </optgroup>
             </select>
         `
     }
@@ -132,7 +138,8 @@ class PrivateIpAddress extends Component {
     }
 
     componentDidMount() {
-        window.mitty.emit('update_addr', this.state.host_ip_addr)
+        let addr = this.props.pairing_method == PairingMethod.DEFAULT ? this.state.host_ip_addr : this.state.console_ip_addr
+        window.mitty.emit('update_addr', addr)
     }
 
     render(props, state) {
@@ -141,14 +148,14 @@ class PrivateIpAddress extends Component {
         return html`
             <label>
                 ${pairing_method == PairingMethod.DEFAULT && html`Host's Private IP Address`}
-                ${pairing_method == PairingMethod.FAST && html`Console's Private IP Address`}
+                ${pairing_method != PairingMethod.DEFAULT && html`Console's Private IP Address`}
             </label>
 
             ${pairing_method == PairingMethod.DEFAULT && state.lock_host && html`
                 <input readonly required id="ipAddr" type="text" size="15" placeholder="${addr}" />
             `}
 
-            ${(pairing_method == PairingMethod.FAST || !state.lock_host) && html`
+            ${(pairing_method != PairingMethod.DEFAULT || !state.lock_host) && html`
                 <input required id="ipAddr" type="text" inputmode="decimal" size="15" maxlength="15" placeholder="192.168.x.x" pattern="^192\\.168\\.((\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.)(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])$" value=${addr} onKeyPress=${this.onKeyPress} onChange="${this.onChange}" />
             `}
 
@@ -181,7 +188,7 @@ class PairingCode extends Component {
             ${props.pairing_method == PairingMethod.DEFAULT && html`
                 <input required id="pairingCode" type="text" inputmode="decimal" value=${state.pairing_code} placeholder="000000" maxlength="6" size="6" pattern="[0-9]{6}" onKeyPress=${(e) => !/[0-9]/.test(e.key) && e.preventDefault()} onChange=${this.onChange} />
             `}
-            ${props.pairing_method == PairingMethod.FAST && html`
+            ${props.pairing_method != PairingMethod.DEFAULT && html`
                 <input type="text" id="pairingCode" value="" readonly placeholder="Not Required" size="12" />
             `}
         `
