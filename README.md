@@ -26,7 +26,6 @@ https://youtu.be/f_1IkUHFdH8
 It pretends to be the [Just Dance Controller app](https://play.google.com/store/apps/details?id=com.ubisoft.dance.justdance2015companion), sends movements of the Joy-Con to your game console.
 
 ## Tested on
-- JD 2022 on Xbox Series X and JD 2020 on Nintendo Switch.
 - MacOS Catalina 10.15 with [TP-Link Bluetooth 4.0 Nano USB Adapter UB400](https://www.tp-link.com/us/home-networking/usb-adapter/ub400/).
 - Raspberry Pi Zero 2 W with [MPOW BH519A Bluetooth 5.1 USB Adapter](https://www.xmpow.com/products/mpow-bh519a-bluetooth-5-1-usb-adapter-for-pc).
   
