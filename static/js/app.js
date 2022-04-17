@@ -138,7 +138,8 @@ class PrivateIpAddress extends Component {
     }
 
     componentDidMount() {
-        window.mitty.emit('update_addr', this.state.host_ip_addr)
+        let addr = this.props.pairing_method == PairingMethod.DEFAULT ? this.state.host_ip_addr : this.state.console_ip_addr
+        window.mitty.emit('update_addr', addr)
     }
 
     render(props, state) {

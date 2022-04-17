@@ -12,7 +12,8 @@ import websockets
 from .constants import (ACCEL_ACQUISITION_FREQ_HZ, ACCEL_ACQUISITION_LATENCY,
                         ACCEL_MAX_RANGE, ACCEL_SEND_RATE, JOYCON_UPDATE_RATE,
                         SHORTCUT_MAPPING, UBI_APP_ID, UBI_SKU_ID,
-                        WS_SUBPROTOCOL, Command, JoyConButton)
+                        WS_SUBPROTOCOLS, Command, JoyConButton,
+                        WsSubprotocolVersion)
 
 
 class PairingState(Enum):
@@ -36,6 +37,7 @@ class JoyDance:
     def __init__(
             self,
             joycon,
+            protocol_version,
             pairing_code=None,
             host_ip_addr=None,
             console_ip_addr=None,
@@ -45,6 +47,7 @@ class JoyDance:
             on_state_changed=None):
         self.joycon = joycon
         self.joycon_is_left = joycon.is_left()
+        self.protocol_version = protocol_version
 
         if on_state_changed:
             self.on_state_changed = on_state_changed
@@ -271,7 +274,10 @@ class JoyDance:
             delta_time += (end - start) * 1000
 
     async def send_command(self):
-        ''' Capture Joycon's input and send to console '''
+        ''' Capture Joycon's input and send to console. Only works on procol v2 '''
+        if self.protocol_version == WsSubprotocolVersion.V1:
+            return
+
         while True:
             try:
                 if self.disconnected:
@@ -348,17 +354,23 @@ class JoyDance:
                 await self.disconnect()
 
     async def connect_ws(self):
-        ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-        ssl_context.set_ciphers('ALL')
-        ssl_context.options &= ~ssl.OP_NO_SSLv3
-        ssl_context.check_hostname = False
-        ssl_context.verify_mode = ssl.CERT_NONE
+        if self.protocol_version == WsSubprotocolVersion.V1:
+            ssl_context = None
+            server_hostname = None
+        else:
+            ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+            ssl_context.set_ciphers('ALL')
+            ssl_context.options &= ~ssl.OP_NO_SSLv3
+            ssl_context.check_hostname = False
+            ssl_context.verify_mode = ssl.CERT_NONE
 
-        server_hostname = self.console_conn.getpeername()[0] if self.console_conn else None
+            server_hostname = self.console_conn.getpeername()[0] if self.console_conn else None
+
+        subprotocol = WS_SUBPROTOCOLS[self.protocol_version.value]
         try:
             async with websockets.connect(
                     self.pairing_url,
-                    subprotocols=[WS_SUBPROTOCOL],
+                    subprotocols=[subprotocol],
                     sock=self.console_conn,
                     ssl=ssl_context,
                     ping_timeout=None,
@@ -391,7 +403,10 @@ class JoyDance:
         try:
             if self.console_ip_addr:
                 await self.on_state_changed(self.joycon.serial, PairingState.CONNECTING)
-                self.pairing_url = 'wss://{}:8080/smartphone'.format(self.console_ip_addr)
+                if self.protocol_version == WsSubprotocolVersion.V1:
+                    self.pairing_url = 'ws://{}:8080/smartphone'.format(self.console_ip_addr)
+                else:
+                    self.pairing_url = 'wss://{}:8080/smartphone'.format(self.console_ip_addr)
             else:
                 await self.on_state_changed(self.joycon.serial, PairingState.GETTING_TOKEN)
                 print('Getting authorication token...')

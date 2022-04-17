@@ -13,7 +13,8 @@ from pyjoycon import ButtonEventJoyCon, JoyCon
 from pyjoycon.constants import JOYCON_PRODUCT_IDS, JOYCON_VENDOR_ID
 
 from joydance import JoyDance, PairingState
-from joydance.constants import DEFAULT_CONFIG, JOYDANCE_VERSION
+from joydance.constants import (DEFAULT_CONFIG, JOYDANCE_VERSION,
+                                WsSubprotocolVersion)
 
 logging.getLogger('asyncio').setLevel(logging.WARNING)
 
@@ -138,14 +139,24 @@ async def connect_joycon(app, ws, data):
     config_parser['joydance'] = config
     save_config(config_parser)
 
-    app['joycons_info'][serial]['pairing_code'] = pairing_code
+    if pairing_method == PairingMethod.DEFAULT.value:
+        app['joycons_info'][serial]['pairing_code'] = pairing_code
+    else:
+        app['joycons_info'][serial]['pairing_code'] = ''
+
     joycon = ButtonEventJoyCon(vendor_id, product_id, serial)
 
     if pairing_method == PairingMethod.DEFAULT.value:
         console_ip_addr = None
 
+    if pairing_method == PairingMethod.OLD.value:
+        protocol_version = WsSubprotocolVersion.V1
+    else:
+        protocol_version = WsSubprotocolVersion.V2
+
     joydance = JoyDance(
             joycon,
+            protocol_version=protocol_version,
             pairing_code=pairing_code,
             host_ip_addr=host_ip_addr,
             console_ip_addr=console_ip_addr,
@@ -163,7 +174,7 @@ async def disconnect_joycon(app, ws, data):
     print(data)
     serial = data['joycon_serial']
     joydance = app['joydance_connections'][serial]
-    app['joycons_info'][serial]['state'] = PairingState.IDLE
+    app['joycons_info'][serial]['state'] = PairingState.IDLE.value
 
     await joydance.disconnect()
     try:
