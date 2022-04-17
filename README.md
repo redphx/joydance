@@ -15,11 +15,11 @@ https://youtu.be/f_1IkUHFdH8
 - Support all platforms (in theory):
 
 |           | Xbox Series | Xbox One | PS4/5 | NSW | Stadia | PC |
-|-----------|-------------|----------|-------|-----|--------|----|
+|-----------|:-----------:|:--------:|:-----:|:---:|:------:|:--:|
 | 2020-2022 | ✅          | ❓       | ❓    | ✅  | [#2](../../issues/2) |    |
 | 2016-2019 |             | ❓       | ❓    | ✅  |                      | ❓ |
 
-✅ = confirmed working, ❓ = not tested
+✅ = confirmed working, ❓ = not tested, but expected to work
 
   
 ## How does it work?
