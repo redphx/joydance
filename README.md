@@ -13,11 +13,14 @@ https://youtu.be/f_1IkUHFdH8
 - No random disconnection.
 - Support up to 6 players.
 - Support all platforms (in theory):
-  - Xbox Series X/S
-  - Nintendo Switch
-  - Xbox One (not tested)
-  - Stadia (not tested)
-  - PlayStation 4/5 (not tested)
+
+|           | Xbox Series | Xbox One | PS4/5 | NSW | Stadia | PC |
+|-----------|-------------|----------|-------|-----|--------|----|
+| 2020-2022 | ✅          | ❓       | ❓    | ✅  | ❓    |    |
+| 2016-2019 |             | ❓       | ❓    | ✅  |       | ❓ |
+
+✅ = confirmed working, ❓ = not tested
+
   
 ## How does it work?
 It pretends to be the [Just Dance Controller app](https://play.google.com/store/apps/details?id=com.ubisoft.dance.justdance2015companion), sends movements of the Joy-Con to your game console.
@@ -105,6 +108,12 @@ sudo udevadm trigger
         - Slower, but supports all platforms (including Xbox Series and Stadia).
         - Requires pairing code.
         - Requires host's private IP address.
+      - Old
+        - For JD 2016-2019 (including PC).
+        - Connect instantly.
+        - Doesn't require pairing code.
+        - Requires PC/console's private IP address.
+        - *Important*: Can't use buttons on Joy-Con to navigate the UI (you'll have to use controllers/keyboard).
 
     - **Host's Private IP Address**:
       - The private IP address of your PC/Mac/Linux. Find this in the Wi-Fi settings.
