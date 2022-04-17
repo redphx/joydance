@@ -28,6 +28,7 @@ class WsCommand(Enum):
 class PairingMethod(Enum):
     DEFAULT = 'default'
     FAST = 'fast'
+    OLD = 'old'
 
 
 REGEX_PAIRING_CODE = re.compile(r'^\d{6}$')
@@ -222,7 +223,7 @@ def is_valid_ip_address(val):
 
 
 def is_valid_pairing_method(val):
-    return val in [PairingMethod.DEFAULT.value, PairingMethod.FAST.value]
+    return val in [PairingMethod.DEFAULT.value, PairingMethod.FAST.value, PairingMethod.OLD.value]
 
 
 def get_host_ip():
