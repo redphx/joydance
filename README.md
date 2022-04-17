@@ -6,7 +6,7 @@
 https://youtu.be/f_1IkUHFdH8
 
 ## Features
-- Play Just Dance 2017 and later on Xbox/Stadia/PS/NSW with Joy-Cons.
+- Play Just Dance 2016 and later on Xbox/Stadia/PS/NSW with Joy-Cons.
 - Playing with a Joy-Con (+ its strap) is safer and more comfortable than holding a phone.
 - No latency.
 - Better score than using a phone (hopefully).
