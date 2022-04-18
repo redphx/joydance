@@ -14,12 +14,14 @@ https://youtu.be/f_1IkUHFdH8
 - Support up to 6 players.
 - Support all platforms (in theory):
 
-|           | Xbox Series | Xbox One | PS4/5 | NSW | Stadia | PC | Wii U |
-|-----------|:-----------:|:--------:|:-----:|:---:|:------:|:--:|:-----:|
-| 2020-2022 | ✅          | ❓       | ❓    | ✅  | [#2](../../issues/2) |    |    |
-| 2016-2019 |             | ❓       | ❓    | ✅  |                      | ❓ | ❓ |
+|              | Xbox Series | Xbox One | PS4/5 | NSW | Stadia | PC | Wii U |
+|--------------|:-----------:|:--------:|:-----:|:---:|:------:|:--:|:-----:|
+| 2020-2022    | ✅          | ❓       | ❓    | ✅  | [#2](../../issues/2) |    |    |
+| 2016-2019 ⚠️ |             | ❓       | ❓    | ✅  |                      | ✅ [#3](../../issues/3) | ❓ |
 
-✅ = confirmed working, ❓ = not tested, but expected to work
+✅ = confirmed working  
+❓ = not tested, but expected to work  
+⚠️ **Important**: Can't use buttons on Joy-Con to navigate the UI on JD 2016-2019 (you'll have to use controllers/keyboard).
 
   
 ## How does it work?
