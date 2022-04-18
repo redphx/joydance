@@ -102,16 +102,16 @@ sudo udevadm trigger
         - Connect instantly.
         - Doesn't require pairing code.
         - Requires console's private IP address.
-      - Default
+      - Default:
         - Slower, but supports all platforms (including Xbox Series and Stadia).
         - Requires pairing code.
         - Requires host's private IP address.
-      - Old
-        - For JD 2016-2019 (including PC).
+      - Old:
+        - For JD 2016-2019 only (including Wii U, PC).
         - Connect instantly.
         - Doesn't require pairing code.
         - Requires PC/console's private IP address.
-        - *Important*: Can't use buttons on Joy-Con to navigate the UI (you'll have to use controllers/keyboard).
+        - ⚠️ **Important**: Can't use buttons on Joy-Con to navigate the UI (you'll have to use controllers/keyboard).
 
     - **Host's Private IP Address**:
       - The private IP address of your PC/Mac/Linux. Find this in the Wi-Fi settings.
