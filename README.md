@@ -6,7 +6,7 @@
 https://youtu.be/f_1IkUHFdH8
 
 ## Features
-- Play Just Dance 2016 and later on Xbox/Stadia/PS/NSW with Joy-Cons.
+- Play Just Dance 2016 and later on all platforms with Joy-Cons.
 - Playing with a Joy-Con (+ its strap) is safer and more comfortable than holding a phone.
 - No latency.
 - Better score than using a phone (hopefully).
@@ -14,10 +14,10 @@ https://youtu.be/f_1IkUHFdH8
 - Support up to 6 players.
 - Support all platforms (in theory):
 
-|           | Xbox Series | Xbox One | PS4/5 | NSW | Stadia | PC |
-|-----------|:-----------:|:--------:|:-----:|:---:|:------:|:--:|
-| 2020-2022 | ✅          | ❓       | ❓    | ✅  | [#2](../../issues/2) |    |
-| 2016-2019 |             | ❓       | ❓    | ✅  |                      | ❓ |
+|           | Xbox Series | Xbox One | PS4/5 | NSW | Stadia | PC | Wii U |
+|-----------|:-----------:|:--------:|:-----:|:---:|:------:|:--:|:-----:|
+| 2020-2022 | ✅          | ❓       | ❓    | ✅  | [#2](../../issues/2) |    |    |
+| 2016-2019 |             | ❓       | ❓    | ✅  |                      | ❓ | ❓ |
 
 ✅ = confirmed working, ❓ = not tested, but expected to work
 
