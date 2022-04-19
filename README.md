@@ -17,7 +17,7 @@ https://youtu.be/f_1IkUHFdH8
 |              | Xbox Series | Xbox One | PS4/5 | NSW | Stadia | PC | Wii U |
 |--------------|:-----------:|:--------:|:-----:|:---:|:------:|:--:|:-----:|
 | 2020-2022    | ✅          | ❓       | ❓    | ✅  | [#2](../../issues/2) |    |    |
-| 2016-2019 ⚠️ |             | ❓       | ❓    | ✅  |                      | ✅ [#3](../../issues/3) | ❓ |
+| 2016-2019 ⚠️ |             | ❓       | ❓    | ✅  |                      | ✅ | ❓ |
 
 ✅ = confirmed working  
 ❓ = not tested, but expected to work  
@@ -47,6 +47,10 @@ It pretends to be the [Just Dance Controller app](https://play.google.com/store/
 ```
 pip3 install -r requirements.txt
 ```
+
+#### Extra step for Windows users
+Please make [this change](../../issues/3#issuecomment-1101087415). It's only a temporary fix, and will be patched in future versions.
+  
 #### Extra steps for Linux users
 
 1. Linux users may need to use [`hid`](https://github.com/apmorton/pyhidapi) instead of [`hidapi`](https://github.com/trezor/cython-hidapi) (not sure why `hidapi` couldn't find Joy-Cons on Linux).
