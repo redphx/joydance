@@ -114,7 +114,10 @@ class JoyDance:
                     raise Exception('ERROR: Invalid pairing code!')
 
                 json_body = await resp.json()
+                import pprint
+                pprint.pprint(json_body)
                 self.pairing_url = json_body['pairingUrl'].replace('https://', 'wss://') + 'smartphone'
+                print(self.pairing_url)
                 self.requires_punch_pairing = json_body.get('requiresPunchPairing', False)
 
     async def send_initiate_punch_pairing(self):
@@ -274,7 +277,7 @@ class JoyDance:
             delta_time += (end - start) * 1000
 
     async def send_command(self):
-        ''' Capture Joycon's input and send to console. Only works on procol v2 '''
+        ''' Capture Joycon's input and send to console. Only works on protocol v2 '''
         if self.protocol_version == WsSubprotocolVersion.V1:
             return
 
