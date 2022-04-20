@@ -21,7 +21,7 @@ https://youtu.be/f_1IkUHFdH8
 
 ✅ = confirmed working  
 ❓ = not tested, but expected to work  
-⚠️ **Important**: Can't use buttons on Joy-Con to navigate the UI in JD 2016-2019 (you'll have to use controllers/keyboard).
+⚠️ **Important**: Can't use buttons on Joy-Con to navigate the UI in JD 2016-2019 (you'll have to use controllers/keyboard). [#6](../../issues/6).
 
   
 ## How does it work?
