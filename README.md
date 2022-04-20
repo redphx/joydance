@@ -149,3 +149,8 @@ sudo udevadm trigger
 
 4. **Is it possible to port JoyDance to wearable devices like smart watches (Wear OS, watchOS...)?**  
   Yes. I tested on a tiny [M5StickC Plus](https://shop.m5stack.com/collections/stick-series/products/m5stickc-plus-esp32-pico-mini-iot-development-kit) and it worked! But remember, some movements require you to move only the palm of your hand won't be recognized correctly.
+
+## Acknowledgements
+-  [dekuNukem/Nintendo_Switch_Reverse_Engineering](https://github.com/dekuNukem/Nintendo_Switch_Reverse_Engineering)
+-  [tocoteron/joycon-python](https://github.com/tocoteron/joycon-python)
+-  [Davidobot/BetterJoy](https://github.com/Davidobot/BetterJoy)
