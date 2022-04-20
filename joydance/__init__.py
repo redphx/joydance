@@ -5,6 +5,7 @@ import socket
 import ssl
 import time
 from enum import Enum
+from urllib.parse import urlparse
 
 import aiohttp
 import websockets
@@ -116,7 +117,14 @@ class JoyDance:
                 json_body = await resp.json()
                 import pprint
                 pprint.pprint(json_body)
-                self.pairing_url = json_body['pairingUrl'].replace('https://', 'wss://') + 'smartphone'
+
+                self.pairing_url = json_body['pairingUrl'].replace('https://', 'wss://')
+                if not self.pairing_url.endswith('/'):
+                    self.pairing_url += '/'
+                self.pairing_url += 'smartphone'
+
+                self.tls_certificate = json_body['tlsCertificate']
+
                 print(self.pairing_url)
                 self.requires_punch_pairing = json_body.get('requiresPunchPairing', False)
 
@@ -357,17 +365,25 @@ class JoyDance:
                 await self.disconnect()
 
     async def connect_ws(self):
+        server_hostname = None
+
         if self.protocol_version == WsSubprotocolVersion.V1:
             ssl_context = None
-            server_hostname = None
         else:
             ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
             ssl_context.set_ciphers('ALL')
             ssl_context.options &= ~ssl.OP_NO_SSLv3
             ssl_context.check_hostname = False
             ssl_context.verify_mode = ssl.CERT_NONE
+            ssl_context.load_verify_locations(cadata=self.tls_certificate)
 
-            server_hostname = self.console_conn.getpeername()[0] if self.console_conn else None
+            if '192.168' in self.pairing_url:
+                if self.console_conn:
+                    server_hostname = self.console_conn.getpeername()[0]
+            else:
+                # Stadia
+                tmp = urlparse(self.pairing_url)
+                server_hostname = tmp.hostname
 
         subprotocol = WS_SUBPROTOCOLS[self.protocol_version.value]
         try:
@@ -390,7 +406,8 @@ class JoyDance:
                 except websockets.ConnectionClosed:
                     await self.on_state_changed(self.joycon.serial, PairingState.ERROR_CONSOLE_CONNECTION)
                     await self.disconnect(close_ws=False)
-        except Exception:
+        except Exception as e:
+            print(e)
             await self.on_state_changed(self.joycon.serial, PairingState.ERROR_CONSOLE_CONNECTION)
             await self.disconnect(close_ws=False)
 
