@@ -362,6 +362,8 @@ class JoyDance:
                         await asyncio.sleep(0.01)
             except Exception as e:
                 print(e)
+                import traceback
+                traceback.print_exc()
                 await self.disconnect()
 
     async def connect_ws(self):
