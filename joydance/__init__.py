@@ -216,7 +216,7 @@ class JoyDance:
             await self.send_message('JD_CancelKeyboard_PhoneCommandData')
         elif __class == 'JD_PhoneUiSetupData':
             self.is_input_allowed = True
-            shortcuts = set()
+            self.available_shortcuts = set()
             if message.get('setupData', {}).get('gameplaySetup', {}).get('pauseSlider', {}):
                 self.available_shortcuts.add(Command.PAUSE)
 
