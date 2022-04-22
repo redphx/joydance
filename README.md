@@ -52,38 +52,41 @@ pip3 install -r requirements.txt
 Please make [this change](../../issues/3#issuecomment-1101087415). It's only a temporary fix, and will be patched in future versions.
   
 #### Extra steps for Linux users
+<details>
+  <summary>Click to expand!</summary>
 
-1. Linux users may need to use [`hid`](https://github.com/apmorton/pyhidapi) instead of [`hidapi`](https://github.com/trezor/cython-hidapi) (not sure why `hidapi` couldn't find Joy-Cons on Linux).
-```
-pip3 uninstall hidapi
+  1. Linux users may need to use [`hid`](https://github.com/apmorton/pyhidapi) instead of [`hidapi`](https://github.com/trezor/cython-hidapi) (not sure why `hidapi` couldn't find Joy-Cons on Linux).
+  ```
+  pip3 uninstall hidapi
 
-sudo apt install libhidapi-dev
-pip3 install hid
-```
+  sudo apt install libhidapi-dev
+  pip3 install hid
+  ```
 
-2. Create a new udev rule file at `/etc/udev/rules.d/50-nintendo-switch.rules` ([Source](https://www.reddit.com/r/Stadia/comments/egcvpq/using_nintendo_switch_pro_controller_on_linux/fc5s7qm/))
-```
-# Switch Joy-con (L) (Bluetooth only)
-KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="0005:057E:2006.*", MODE="0666"
+  2. Create a new udev rule file at `/etc/udev/rules.d/50-nintendo-switch.rules` ([Source](https://www.reddit.com/r/Stadia/comments/egcvpq/using_nintendo_switch_pro_controller_on_linux/fc5s7qm/))
+  ```
+  # Switch Joy-con (L) (Bluetooth only)
+  KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="0005:057E:2006.*", MODE="0666"
 
-# Switch Joy-con (R) (Bluetooth only)
-KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="0005:057E:2007.*", MODE="0666"
+  # Switch Joy-con (R) (Bluetooth only)
+  KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="0005:057E:2007.*", MODE="0666"
 
-# Switch Pro controller (USB and Bluetooth)
-KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="2009", MODE="0666"
-KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="0005:057E:2009.*", MODE="0666"
+  # Switch Pro controller (USB and Bluetooth)
+  KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="2009", MODE="0666"
+  KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="0005:057E:2009.*", MODE="0666"
 
-# Switch Joy-con charging grip (USB only)
-KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="200e", MODE="0666"
-```
+  # Switch Joy-con charging grip (USB only)
+  KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="200e", MODE="0666"
+  ```
 
-Reload udev rules:
-```
-sudo udevadm control --reload-rules
-sudo udevadm trigger
-```
+  Reload udev rules:
+  ```
+  sudo udevadm control --reload-rules
+  sudo udevadm trigger
+  ```
 
-3. Install [`dkms-hid-nintendo`](https://github.com/nicman23/dkms-hid-nintendo) (Joy-Con driver) if you're running Linux kernel older than 5.16.
+  3. Install [`dkms-hid-nintendo`](https://github.com/nicman23/dkms-hid-nintendo) (Joy-Con driver) if you're running Linux kernel older than 5.16.
+</details>
 
 ## Usage
 
@@ -149,6 +152,9 @@ sudo udevadm trigger
 
 4. **Is it possible to port JoyDance to wearable devices like smart watches (Wear OS, watchOS...)?**  
   Yes. I tested on a tiny [M5StickC Plus](https://shop.m5stack.com/collections/stick-series/products/m5stickc-plus-esp32-pico-mini-iot-development-kit) and it worked! But remember, some movements require you to move only the palm of your hand won't be recognized correctly.
+
+5. **Can I play Just Dance 2017 (PC) and run JoyDance on the same PC?**  
+  Yes, you can.
 
 ## Acknowledgements
 -  [dekuNukem/Nintendo_Switch_Reverse_Engineering](https://github.com/dekuNukem/Nintendo_Switch_Reverse_Engineering)
