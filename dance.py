@@ -29,6 +29,7 @@ class WsCommand(Enum):
 class PairingMethod(Enum):
     DEFAULT = 'default'
     FAST = 'fast'
+    STADIA = 'stadia'
     OLD = 'old'
 
 
@@ -139,15 +140,13 @@ async def connect_joycon(app, ws, data):
     config_parser['joydance'] = config
     save_config(config_parser)
 
-    if pairing_method == PairingMethod.DEFAULT.value:
+    if pairing_method == PairingMethod.DEFAULT.value or pairing_method == PairingMethod.STADIA.value:
         app['joycons_info'][serial]['pairing_code'] = pairing_code
+        console_ip_addr = None
     else:
         app['joycons_info'][serial]['pairing_code'] = ''
 
     joycon = ButtonEventJoyCon(vendor_id, product_id, serial)
-
-    if pairing_method == PairingMethod.DEFAULT.value:
-        console_ip_addr = None
 
     if pairing_method == PairingMethod.OLD.value:
         protocol_version = WsSubprotocolVersion.V1
@@ -234,7 +233,12 @@ def is_valid_ip_address(val):
 
 
 def is_valid_pairing_method(val):
-    return val in [PairingMethod.DEFAULT.value, PairingMethod.FAST.value, PairingMethod.OLD.value]
+    return val in [
+        PairingMethod.DEFAULT.value,
+        PairingMethod.FAST.value,
+        PairingMethod.STADIA.value,
+        PairingMethod.OLD.value,
+    ]
 
 
 def get_host_ip():

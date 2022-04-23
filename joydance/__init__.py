@@ -57,6 +57,7 @@ class JoyDance:
         self.host_ip_addr = host_ip_addr
         self.console_ip_addr = console_ip_addr
         self.host_port = self.get_random_port()
+        self.tls_certificate = None
 
         self.accel_acquisition_freq_hz = accel_acquisition_freq_hz
         self.accel_acquisition_latency = accel_acquisition_latency
@@ -377,7 +378,9 @@ class JoyDance:
             ssl_context.options &= ~ssl.OP_NO_SSLv3
             ssl_context.check_hostname = False
             ssl_context.verify_mode = ssl.CERT_NONE
-            ssl_context.load_verify_locations(cadata=self.tls_certificate)
+
+            if self.tls_certificate:
+                ssl_context.load_verify_locations(cadata=self.tls_certificate)
 
             if '192.168' in self.pairing_url:
                 if self.console_conn:
