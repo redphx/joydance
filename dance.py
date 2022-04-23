@@ -7,6 +7,7 @@ import time
 from configparser import ConfigParser
 from enum import Enum
 
+import aiohttp
 import hid
 from aiohttp import WSMsgType, web
 from pyjoycon import ButtonEventJoyCon, JoyCon
@@ -257,6 +258,26 @@ def save_config(parser):
         parser.write(fp)
 
 
+async def on_startup(app):
+    print('''
+     ░░  ░░░░░░  ░░    ░░ ░░░░░░   ░░░░░  ░░░    ░░  ░░░░░░ ░░░░░░░
+     ▒▒ ▒▒    ▒▒  ▒▒  ▒▒  ▒▒   ▒▒ ▒▒   ▒▒ ▒▒▒▒   ▒▒ ▒▒      ▒▒
+     ▒▒ ▒▒    ▒▒   ▒▒▒▒   ▒▒   ▒▒ ▒▒▒▒▒▒▒ ▒▒ ▒▒  ▒▒ ▒▒      ▒▒▒▒▒
+▓▓   ▓▓ ▓▓    ▓▓    ▓▓    ▓▓   ▓▓ ▓▓   ▓▓ ▓▓  ▓▓ ▓▓ ▓▓      ▓▓
+ █████   ██████     ██    ██████  ██   ██ ██   ████  ██████ ███████
+
+Open http://localhost:32623 in your browser.''')
+
+    # Check for update
+    async with aiohttp.ClientSession() as session:
+        async with session.get('https://api.github.com/repos/redphx/joydance/releases/latest', ssl=False) as resp:
+            json_body = await resp.json()
+            latest_version = json_body['tag_name'][1:]
+            print('Running version {}.'.format(JOYDANCE_VERSION))
+            if JOYDANCE_VERSION != latest_version:
+                print('\033[93m{}\033[00m'.format('Version {} is available: https://github.com/redphx/joydance'.format(latest_version)))
+
+
 async def html_handler(request):
     config = dict((parse_config()).items('joydance'))
     with open('static/index.html', 'r') as f:
@@ -311,6 +332,7 @@ app = web.Application()
 app['joydance_connections'] = {}
 app['joycons_info'] = {}
 
+app.on_startup.append(on_startup)
 app.add_routes([
     web.get('/', html_handler),
     web.get('/favicon.png', favicon_handler),
