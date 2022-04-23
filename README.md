@@ -110,12 +110,13 @@ Please make [this change](../../issues/3#issuecomment-1101087415). It's only a t
 6. Fill the form.
 
     - **Pairing Method**:
-      |                    | Default        | Fast      | Stadia  | Old                   |
-      |--------------------|----------------|-----------|---------|-----------------------|
-      | Platforms          | All but Stadia | X1/PS/NSW | Stadia  | All, incl. PC & Wii U |
-      | Speed              | Slow           | Fast      | Slow    | Fast                  |
-      | Pairing Code       | Require        |           | Require |                       |
-      | Private IP Address | Host           | Console   |         | PC/Console            |
+      |                    | Default        | Fast      | Stadia    | Old                   |
+      |--------------------|----------------|-----------|-----------|-----------------------|
+      | Platforms          | All but Stadia | X1/PS/NSW | Stadia    | All, incl. PC & Wii U |
+      | Game versions      | 2020-2022      | 2020-2022 | 2020-2022 | 2016-2019             |
+      | Speed              | Slow           | Fast      | Slow      | Fast                  |
+      | Pairing Code       | Require        |           | Require   |                       |
+      | Private IP Address | Host           | Console   |           | PC/Console            |
 
     - **Host's Private IP Address**:
       - The private IP address of your PC/Mac/Linux running JoyDance. Find this in the Wi-Fi settings.
