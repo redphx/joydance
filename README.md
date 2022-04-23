@@ -16,8 +16,8 @@ https://youtu.be/f_1IkUHFdH8
 
 |              | Xbox Series | Xbox One | PS4/5 | NSW | Stadia | PC | Wii U |
 |--------------|:-----------:|:--------:|:-----:|:---:|:------:|:--:|:-----:|
-| 2020-2022    | ✅          | ❓       | ❓    | ✅  | [#2](../../issues/2) |    |    |
-| 2016-2019 ⚠️ |             | ❓       | ❓    | ✅  |                      | ✅ | ✅ |
+| 2020-2022    | ✅          | ❓       | ❓    | ✅  | ✅    |    |       |
+| 2016-2019 ⚠️ |             | ❓       | ❓    | ✅  |       | ✅ | ✅    |
 
 ✅ = confirmed working  
 ❓ = not tested, but expected to work  
@@ -92,12 +92,16 @@ Please make [this change](../../issues/3#issuecomment-1101087415). It's only a t
 
 1. Open the phone pairing screen on Just Dance.
 
-2. Connect your PC/Mac/Linux to the same Wi-Fi or LAN network as your game console.
+2. Connect your PC/Mac/Linux to the same Wi-Fi or LAN network as your game console. For Stadia you just need to connect to the internet.
 
 3. Run this command:
-  ```
-  python3 dance.py
-  ```
+    ```
+    python3 dance.py
+    ```
+    or
+    ```
+    python dance.py
+    ```
 
 4. Open http://localhost:32623 (not https://...) in a web browser (32623 = DANCE). You can also open JoyDance on another device (connected to the same network) with this link: `http://[JOYDANCE_DEVICE_IP]:32623` (for example: `http://192.168.1.100:32623`).
 
@@ -106,27 +110,18 @@ Please make [this change](../../issues/3#issuecomment-1101087415). It's only a t
 6. Fill the form.
 
     - **Pairing Method**:
-      - Fast:
-        - Only for Xbox One, PlayStation 4/5 and Nintendo Switch.
-        - Connect instantly.
-        - Doesn't require pairing code.
-        - Requires console's private IP address.
-      - Default:
-        - Slower, but supports all platforms (including Xbox Series and Stadia).
-        - Requires pairing code.
-        - Requires host's private IP address.
-      - Old:
-        - For JD 2016-2019 only (including Wii U, PC).
-        - Connect instantly.
-        - Doesn't require pairing code.
-        - Requires PC/console's private IP address.
-        - ⚠️ **Important**: Can't use buttons on Joy-Con to navigate the UI (you'll have to use controllers/keyboard).
+      |                    | Default        | Fast      | Stadia  | Old                   |
+      |--------------------|----------------|-----------|---------|-----------------------|
+      | Platforms          | All but Stadia | X1/PS/NSW | Stadia  | All, incl. PC & Wii U |
+      | Speed              | Slow           | Fast      | Slow    | Fast                  |
+      | Pairing Code       | Require        |           | Require |                       |
+      | Private IP Address | Host           | Console   |         | PC/Console            |
 
     - **Host's Private IP Address**:
-      - The private IP address of your PC/Mac/Linux. Find this in the Wi-Fi settings.
+      - The private IP address of your PC/Mac/Linux running JoyDance. Find this in the Wi-Fi settings.
       - Starts with `192.168`.
-    - **Console's Private IP Address**:
-      - The private IP address of your console. Find this in the Wi-Fi settings on console.
+    - **PC/Console's Private IP Address**:
+      - The private IP address of your PC/console. Find this in the Wi-Fi settings on PC/console.
       - Starts with `192.168`.
     - **Pairing Code**: get this from the game.
 
