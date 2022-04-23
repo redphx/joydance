@@ -18,6 +18,7 @@ const BATTERY_LEVEL = {
 const PairingMethod = {
     DEFAULT: 'default',
     FAST: 'fast',
+    STADIA: 'stadia',
     OLD: 'old',
 }
 
@@ -85,8 +86,9 @@ class PairingMethodPicker extends Component {
             <label for="stacked-state">Pairing Method</label>
             <select id="stacked-state" onChange=${this.onChange} value=${props.pairing_method}>
                 <optgroup label="JD 2020 and later">
-                    <option value="${PairingMethod.DEFAULT}">Default: All platforms (incl. Xbox Series/Stadia)</option>
+                    <option value="${PairingMethod.DEFAULT}">Default: All platforms except Stadia</option>
                     <option value="${PairingMethod.FAST}">Fast: Xbox One/PlayStation/Nintendo Switch</option>
+                    <option value="${PairingMethod.STADIA}">Stadia: for Stadia, obviously</option>
                 </optgroup>
                 <optgroup label="JD 2016-2019">
                     <option value="${PairingMethod.OLD}">Old: All platforms (incl. PC)</option>
@@ -147,15 +149,19 @@ class PrivateIpAddress extends Component {
         const addr = pairing_method == PairingMethod.DEFAULT ? state.host_ip_addr : state.console_ip_addr
         return html`
             <label>
-                ${pairing_method == PairingMethod.DEFAULT && html`Host's Private IP Address`}
-                ${pairing_method != PairingMethod.DEFAULT && html`Console's Private IP Address`}
+                ${[PairingMethod.DEFAULT, PairingMethod.STADIA].indexOf(pairing_method) > -1 && html`Host's Private IP Address`}
+                ${[PairingMethod.DEFAULT, PairingMethod.STADIA].indexOf(pairing_method) == -1 && html`Console's Private IP Address`}
             </label>
 
-            ${pairing_method == PairingMethod.DEFAULT && state.lock_host && html`
-                <input readonly required id="ipAddr" type="text" size="15" placeholder="${addr}" />
+            ${(pairing_method == PairingMethod.STADIA) && html`
+                <input readonly id="ipAddr" type="text" size="15" placeholder="Not Required" />
             `}
 
-            ${(pairing_method != PairingMethod.DEFAULT || !state.lock_host) && html`
+            ${(pairing_method == PairingMethod.DEFAULT && state.lock_host) && html`
+                <input readonly id="ipAddr" type="text" size="15" placeholder="${addr}" />
+            `}
+
+            ${([PairingMethod.FAST, PairingMethod.OLD].indexOf(pairing_method) > -1 || (pairing_method == PairingMethod.DEFAULT && !state.lock_host)) && html`
                 <input required id="ipAddr" type="text" inputmode="decimal" size="15" maxlength="15" placeholder="192.168.x.x" pattern="^192\\.168\\.((\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.)(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])$" value=${addr} onKeyPress=${this.onKeyPress} onChange="${this.onChange}" />
             `}
 
@@ -183,12 +189,13 @@ class PairingCode extends Component {
     }
 
     render(props, state) {
+        const pairing_method = props.pairing_method
         return html`
             <label>Pairing Code</label>
-            ${props.pairing_method == PairingMethod.DEFAULT && html`
+            ${[PairingMethod.DEFAULT, PairingMethod.STADIA].indexOf(pairing_method) > -1 && html`
                 <input required id="pairingCode" type="text" inputmode="decimal" value=${state.pairing_code} placeholder="000000" maxlength="6" size="6" pattern="[0-9]{6}" onKeyPress=${(e) => !/[0-9]/.test(e.key) && e.preventDefault()} onChange=${this.onChange} />
             `}
-            ${props.pairing_method != PairingMethod.DEFAULT && html`
+            ${[PairingMethod.DEFAULT, PairingMethod.STADIA].indexOf(pairing_method) == -1 && html`
                 <input type="text" id="pairingCode" value="" readonly placeholder="Not Required" size="12" />
             `}
         `
