@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+import platform
 import re
 import socket
 import time
@@ -81,7 +82,10 @@ async def get_joycon_list(app):
                     break
 
             color = '#%02x%02x%02x' % joycon.color_body
-            joycon.__del__()
+
+            # Temporary fix for Windows
+            if platform.system() != 'Windows':
+                joycon.__del__()
 
             info = {
                 'vendor_id': dev['vendor_id'],

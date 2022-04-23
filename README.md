@@ -47,9 +47,6 @@ It pretends to be the [Just Dance Controller app](https://play.google.com/store/
 ```
 pip3 install -r requirements.txt
 ```
-
-#### Extra step for Windows users
-Please make [this change](../../issues/3#issuecomment-1101087415). It's only a temporary fix, and will be patched in future versions.
   
 #### Extra steps for Linux users
 <details>
