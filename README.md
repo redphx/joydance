@@ -12,16 +12,14 @@ https://youtu.be/f_1IkUHFdH8
 - Better score than using a phone (hopefully).
 - No random disconnection.
 - Support up to 6 players.
-- Support all platforms (in theory):
+- Support all platforms:
 
 |              | Xbox Series | Xbox One | PS4/5 | NSW | Stadia | PC | Wii U |
 |--------------|:-----------:|:--------:|:-----:|:---:|:------:|:--:|:-----:|
-| 2020-2022    | ✅          | ❓       | ❓    | ✅  | ✅    |    |       |
-| 2016-2019 ⚠️ |             | ❓       | ❓    | ✅  |       | ✅ | ✅    |
+| 2020-2022    | ✅          | ✅       | ✅    | ✅  | ✅    |    |       |
+| 2016-2019 ⚠️ |             | ✅       | ✅    | ✅  |       | ✅ | ✅    |
 
-✅ = confirmed working  
-❓ = not tested, but expected to work  
-⚠️ **Important**: Can't use buttons on Joy-Con to navigate the UI in JD 2016-2019 (you'll have to use controllers/keyboard). [#6](../../issues/6).
+⚠️ **Important**: Can't use buttons on Joy-Con to navigate the UI in JD 2016-2019 (you'll have to use controllers/keyboard). See [#6](../../issues/6).
 
   
 ## How does it work?
@@ -111,7 +109,7 @@ pip3 install -r requirements.txt
       |--------------------|----------------|-----------|-----------|-----------------------|
       | Platforms          | All but Stadia | X1/PS/NSW | Stadia    | All, incl. PC & Wii U |
       | Game versions      | 2020-2022      | 2020-2022 | 2020-2022 | 2016-2019             |
-      | Speed              | Slow           | Fast      | Slow      | Fast                  |
+      | Pairing Speed      | Slow           | Fast      | Slow      | Fast                  |
       | Pairing Code       | Require        |           | Require   |                       |
       | Private IP Address | Host           | Console   |           | PC/Console            |
 
