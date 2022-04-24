@@ -36,7 +36,7 @@ class PairingMethod(Enum):
 
 
 REGEX_PAIRING_CODE = re.compile(r'^\d{6}$')
-REGEX_LOCAL_IP_ADDRESS = re.compile(r'^192\.168\.((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.)(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$')
+REGEX_LOCAL_IP_ADDRESS = re.compile(r'^(192\.168|10.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5]))\.((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.)(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$')
 
 
 async def get_device_ids():
@@ -249,7 +249,7 @@ def is_valid_pairing_method(val):
 def get_host_ip():
     try:
         for ip in socket.gethostbyname_ex(socket.gethostname())[2]:
-            if ip.startswith('192.168'):
+            if ip.startswith('192.168') or ip.startswith('10.'):
                 return ip
     except Exception:
         pass

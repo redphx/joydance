@@ -107,7 +107,7 @@ class PrivateIpAddress extends Component {
         let console_ip_addr = props.console_ip_addr
 
         let hostname = window.location.hostname
-        if (hostname.startsWith('192.168.')) {
+        if (hostname.startsWith('192.168.') || hostname.startsWith('10.')) {
             host_ip_addr = hostname
             lock_host = true
         }
@@ -162,7 +162,7 @@ class PrivateIpAddress extends Component {
             `}
 
             ${([PairingMethod.FAST, PairingMethod.OLD].indexOf(pairing_method) > -1 || (pairing_method == PairingMethod.DEFAULT && !state.lock_host)) && html`
-                <input required id="ipAddr" type="text" inputmode="decimal" size="15" maxlength="15" placeholder="192.168.x.x" pattern="^192\\.168\\.((\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.)(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])$" value=${addr} onKeyPress=${this.onKeyPress} onChange="${this.onChange}" />
+                <input required id="ipAddr" type="text" inputmode="decimal" size="15" maxlength="15" placeholder="192.168.?/10.?" pattern="^(192\\.168|10.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5]))\\.((\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.)(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])$" value=${addr} onKeyPress=${this.onKeyPress} onChange="${this.onChange}" />
             `}
 
         `
@@ -385,7 +385,7 @@ class App extends Component {
         const state = this.state
         const pairing_method = state.pairing_method
         let addr = pairing_method == PairingMethod.DEFAULT ? state.host_ip_addr : state.console_ip_addr
-        if (!addr.match(/^192\.168\.((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.)(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/)) {
+        if (!addr.match(/^(192\.168|10.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5]))\.((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.)(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/)) {
             alert('ERROR: Invalid IP address!')
             document.getElementById('ipAddr').focus()
             return
