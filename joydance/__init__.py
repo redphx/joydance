@@ -149,6 +149,7 @@ class JoyDance:
         ''' Open a port on this machine so the console can connect to it '''
         try:
             conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            conn.settimeout(10)
             conn.bind(('0.0.0.0', self.host_port))
             conn.listen(5)
 
@@ -382,7 +383,7 @@ class JoyDance:
             if self.tls_certificate:
                 ssl_context.load_verify_locations(cadata=self.tls_certificate)
 
-            if '192.168' in self.pairing_url:
+            if self.pairing_url.startswith('192.168.') or self.pairing_url.startswith('10.'):
                 if self.console_conn:
                     server_hostname = self.console_conn.getpeername()[0]
             else:
