@@ -165,9 +165,6 @@ async def connect_joycon(app, ws, data):
         host_ip_addr=host_ip_addr,
         console_ip_addr=console_ip_addr,
         on_state_changed=on_joydance_state_changed,
-        accel_acquisition_freq_hz=config['accel_acquisition_freq_hz'],
-        accel_acquisition_latency=config['accel_acquisition_latency'],
-        accel_max_range=config['accel_max_range'],
     )
     app['joydance_connections'][serial] = joydance
 
