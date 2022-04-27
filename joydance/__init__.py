@@ -257,7 +257,7 @@ class JoyDance:
                 if dt >= FRAME_DURATION:
                     break
             last_time = time_now
-            frames = frames + 1 if frames < 5 else 1
+            frames = frames + 1 if frames < 3 else 1
 
             if not self.should_start_accelerometer:
                 await asyncio.sleep(sleep_duration),
@@ -299,7 +299,7 @@ class JoyDance:
         if not self.should_start_accelerometer:
             return
 
-        if frames < 5:
+        if frames < 3:
             return
 
         tmp_accel_data = []
