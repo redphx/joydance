@@ -69,6 +69,7 @@ class JoyDance:
         self.available_shortcuts = set()
 
         self.accel_data = []
+        self.last_accel = (0, 0, 0)
 
         self.ws = None
         self.disconnected = False
@@ -265,11 +266,10 @@ class JoyDance:
 
             await asyncio.gather(
                 asyncio.sleep(sleep_duration),
-                self.collect_accelerometer_data(),
-                self.send_accelerometer_data(frames),
+                self.collect_accelerometer_data(frames),
             )
 
-    async def collect_accelerometer_data(self):
+    async def collect_accelerometer_data(self, frames):
         if self.disconnected:
             return
 
@@ -278,19 +278,23 @@ class JoyDance:
             return
 
         try:
-            accel = {
-                'x': self.joycon.get_accel_x(),
-                'y': self.joycon.get_accel_y(),
-                'z': self.joycon.get_accel_z(),
-            }
+            start = time.time()
+            max_runtime = FRAME_DURATION * 0.5
+            while time.time() - start < max_runtime:
+                # Make sure accelerometer axes are changed
+                accel = self.joycon.get_accels()  # (x, y, z)
+                if accel != self.last_accel:
+                    self.last_accel = accel
+                    break
 
             # Accelerator axes on phone & Joy-Con are different so we need to swap some axes
             # https://github.com/dekuNukem/Nintendo_Switch_Reverse_Engineering/blob/master/imu_sensor_notes.md
-            x = accel['y'] * -1
-            y = accel['x']
-            z = accel['z']
+            x = accel[1] * -1
+            y = accel[0]
+            z = accel[2]
 
             self.accel_data.append([x, y, z])
+            await self.send_accelerometer_data(frames),
         except OSError:
             self.disconnect()
             return
