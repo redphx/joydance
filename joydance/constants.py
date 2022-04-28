@@ -14,10 +14,9 @@ WS_SUBPROTOCOLS = {}
 WS_SUBPROTOCOLS[WsSubprotocolVersion.V1.value] = 'v1.phonescoring.jd.ubisoft.com'
 WS_SUBPROTOCOLS[WsSubprotocolVersion.V2.value] = 'v2.phonescoring.jd.ubisoft.com'
 
-JOYCON_UPDATE_RATE = 0.02  # 50Hz
-ACCEL_SEND_RATE = 40  # ms
-ACCEL_ACQUISITION_FREQ_HZ = 50  # Hz
-ACCEL_ACQUISITION_LATENCY = 20  # ms
+FRAME_DURATION = 1 / 60
+ACCEL_ACQUISITION_FREQ_HZ = 60  # Hz
+ACCEL_ACQUISITION_LATENCY = 40  # ms
 ACCEL_MAX_RANGE = 8  # ±G
 
 DEFAULT_CONFIG = {
@@ -25,9 +24,6 @@ DEFAULT_CONFIG = {
     'host_ip_addr': '',
     'console_ip_addr': '',
     'pairing_code': '',
-    'accel_acquisition_freq_hz': ACCEL_ACQUISITION_FREQ_HZ,
-    'accel_acquisition_latency': ACCEL_ACQUISITION_LATENCY,
-    'accel_max_range': ACCEL_MAX_RANGE,
 }
 
 

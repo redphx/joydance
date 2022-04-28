@@ -4,6 +4,7 @@ import random
 import socket
 import ssl
 import time
+import traceback
 from enum import Enum
 from urllib.parse import urlparse
 
@@ -11,10 +12,9 @@ import aiohttp
 import websockets
 
 from .constants import (ACCEL_ACQUISITION_FREQ_HZ, ACCEL_ACQUISITION_LATENCY,
-                        ACCEL_MAX_RANGE, ACCEL_SEND_RATE, JOYCON_UPDATE_RATE,
-                        SHORTCUT_MAPPING, UBI_APP_ID, UBI_SKU_ID,
-                        WS_SUBPROTOCOLS, Command, JoyConButton,
-                        WsSubprotocolVersion)
+                        ACCEL_MAX_RANGE, FRAME_DURATION, SHORTCUT_MAPPING,
+                        UBI_APP_ID, UBI_SKU_ID, WS_SUBPROTOCOLS, Command,
+                        JoyConButton, WsSubprotocolVersion)
 
 
 class PairingState(Enum):
@@ -67,6 +67,9 @@ class JoyDance:
         self.should_start_accelerometer = False
         self.is_input_allowed = False
         self.available_shortcuts = set()
+
+        self.accel_data = []
+        self.last_accel = (0, 0, 0)
 
         self.ws = None
         self.disconnected = False
@@ -239,52 +242,84 @@ class JoyDance:
         async for message in self.ws:
             await self.on_message(message)
 
-    async def send_accelerometer_data(self):
-        accel_data = []
-        delta_time = 0
-
-        end = time.time()
+    async def tick(self):
+        sleep_duration = FRAME_DURATION * 0.75
+        last_time = time.time()
+        frames = 0
 
         while True:
             if self.disconnected:
                 break
 
+            # Make sure it runs at exactly 60 FPS
+            while True:
+                time_now = time.time()
+                dt = time_now - last_time
+                if dt >= FRAME_DURATION:
+                    break
+            last_time = time_now
+            frames = frames + 1 if frames < 3 else 1
+
             if not self.should_start_accelerometer:
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(sleep_duration),
                 continue
 
+            await asyncio.gather(
+                asyncio.sleep(sleep_duration),
+                self.collect_accelerometer_data(frames),
+            )
+
+    async def collect_accelerometer_data(self, frames):
+        if self.disconnected:
+            return
+
+        if not self.should_start_accelerometer:
+            self.accel_data = []
+            return
+
+        try:
             start = time.time()
-            if delta_time > ACCEL_SEND_RATE:
-                delta_time = 0
-                while len(accel_data) > 0:
-                    accels_num = min(len(accel_data), 10)
-
-                    await self.send_message('JD_PhoneScoringData', {
-                        'accelData': accel_data[:accels_num],
-                        'timeStamp': self.number_of_accels_sent,
-                    })
-
-                    self.number_of_accels_sent += accels_num
-                    accel_data = accel_data[accels_num:]
-
-            try:
-                await asyncio.sleep(JOYCON_UPDATE_RATE)
-                joycon_status = self.joycon.get_status()
-            except OSError:
-                self.disconnect()
-                return
+            max_runtime = FRAME_DURATION * 0.5
+            while time.time() - start < max_runtime:
+                # Make sure accelerometer axes are changed
+                accel = self.joycon.get_accels()  # (x, y, z)
+                if accel != self.last_accel:
+                    self.last_accel = accel
+                    break
 
             # Accelerator axes on phone & Joy-Con are different so we need to swap some axes
             # https://github.com/dekuNukem/Nintendo_Switch_Reverse_Engineering/blob/master/imu_sensor_notes.md
-            accel = joycon_status['accel']
-            x = accel['y'] * -1
-            y = accel['x']
-            z = accel['z']
+            x = accel[1] * -1
+            y = accel[0]
+            z = accel[2]
 
-            accel_data.append([x, y, z])
+            self.accel_data.append([x, y, z])
+            await self.send_accelerometer_data(frames),
+        except OSError:
+            self.disconnect()
+            return
 
-            end = time.time()
-            delta_time += (end - start) * 1000
+    async def send_accelerometer_data(self, frames):
+        if not self.should_start_accelerometer:
+            return
+
+        if frames < 3:
+            return
+
+        tmp_accel_data = []
+        while len(self.accel_data):
+            tmp_accel_data.append(self.accel_data.pop(0))
+
+        while len(tmp_accel_data) > 0:
+            accels_num = min(len(tmp_accel_data), 10)
+
+            await self.send_message('JD_PhoneScoringData', {
+                'accelData': tmp_accel_data[:accels_num],
+                'timeStamp': self.number_of_accels_sent,
+            })
+
+            self.number_of_accels_sent += accels_num
+            tmp_accel_data = tmp_accel_data[accels_num:]
 
     async def send_command(self):
         ''' Capture Joycon's input and send to console. Only works on protocol v2 '''
@@ -292,15 +327,13 @@ class JoyDance:
             return
 
         while True:
+            if self.disconnected:
+                return
+
             try:
-                if self.disconnected:
-                    return
-
+                await asyncio.sleep(FRAME_DURATION)
                 if not self.is_input_allowed and not self.should_start_accelerometer:
-                    await asyncio.sleep(JOYCON_UPDATE_RATE * 5)
                     continue
-
-                await asyncio.sleep(JOYCON_UPDATE_RATE * 5)
 
                 cmd = None
                 # Get pressed button
@@ -309,7 +342,7 @@ class JoyDance:
                         continue
 
                     joycon_button = JoyConButton(event_type)
-                    if self.should_start_accelerometer:  # Can only send Pause command while playing
+                    if self.should_start_accelerometer:  # Only allow to send Pause command while playing
                         if joycon_button == JoyConButton.PLUS or joycon_button == JoyConButton.MINUS:
                             cmd = Command.PAUSE
                     else:
@@ -318,7 +351,7 @@ class JoyDance:
                         elif joycon_button == JoyConButton.B or joycon_button == JoyConButton.DOWN:
                             cmd = Command.BACK
                         elif joycon_button in SHORTCUT_MAPPING:
-                            # Get command depends on which button was pressed & which shortcuts are available
+                            # Get command depends on which button is being pressed & which shortcuts are available
                             for shortcut in SHORTCUT_MAPPING[joycon_button]:
                                 if shortcut in self.available_shortcuts:
                                     cmd = shortcut
@@ -344,27 +377,21 @@ class JoyDance:
 
                 # Send command to server
                 if cmd:
+                    data = {}
                     if cmd == Command.PAUSE:
                         __class = 'JD_Pause_PhoneCommandData'
-                        data = {}
                     elif type(cmd.value) == str:
                         __class = 'JD_Custom_PhoneCommandData'
-                        data = {
-                            'identifier': cmd.value,
-                        }
+                        data['identifier'] = cmd.value
                     else:
                         __class = 'JD_Input_PhoneCommandData'
-                        data = {
-                            'input': cmd.value,
-                        }
+                        data['input'] = cmd.value
 
                     # Only send input when it's allowed to, otherwise we might get a disconnection
                     if self.is_input_allowed:
                         await self.send_message(__class, data)
-                        await asyncio.sleep(0.01)
-            except Exception as e:
-                print(e)
-                import traceback
+                        await asyncio.sleep(FRAME_DURATION * 5)
+            except Exception:
                 traceback.print_exc()
                 await self.disconnect()
 
@@ -403,17 +430,18 @@ class JoyDance:
             ) as websocket:
                 try:
                     self.ws = websocket
+
                     await asyncio.gather(
                         self.send_hello(),
-                        self.send_accelerometer_data(),
+                        self.tick(),
                         self.send_command(),
                     )
 
                 except websockets.ConnectionClosed:
                     await self.on_state_changed(self.joycon.serial, PairingState.ERROR_CONSOLE_CONNECTION)
                     await self.disconnect(close_ws=False)
-        except Exception as e:
-            print(e)
+        except Exception:
+            traceback.print_exc()
             await self.on_state_changed(self.joycon.serial, PairingState.ERROR_CONSOLE_CONNECTION)
             await self.disconnect(close_ws=False)
 
@@ -449,6 +477,6 @@ class JoyDance:
                     await self.hole_punching()
 
             await self.connect_ws()
-        except Exception as e:
+        except Exception:
             await self.disconnect()
-            print(e)
+            traceback.print_exc()
