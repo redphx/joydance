@@ -1,6 +1,7 @@
 import hid
-from .constants import JOYCON_VENDOR_ID, JOYCON_PRODUCT_IDS
-from .constants import JOYCON_L_PRODUCT_ID, JOYCON_R_PRODUCT_ID
+
+from .constants import (JOYCON_L_PRODUCT_ID, JOYCON_PRODUCT_IDS,
+                        JOYCON_R_PRODUCT_ID, JOYCON_VENDOR_ID)
 
 
 def get_device_ids(debug=False):

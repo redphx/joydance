@@ -46,9 +46,6 @@ class PythonicJoyCon(JoyCon):
     left_sr       = property(JoyCon.get_button_left_sr)
     left_sl       = property(JoyCon.get_button_left_sl)
 
-    set_led_on       = JoyCon.set_player_lamp_on
-    set_led_flashing = JoyCon.set_player_lamp_flashing
-    set_led          = JoyCon.set_player_lamp
     disconnect       = JoyCon.disconnect_device
 
     @property
@@ -86,57 +83,6 @@ class PythonicJoyCon(JoyCon):
                 self.get_accel_x(i) * c,
                 self.get_accel_y(i) * c2,
                 self.get_accel_z(i) * c2,
-            )
-            for i in range(3)
-        ]
-
-    @property
-    def gyro(self):
-        c = self._ime_yz_coeff
-        return [
-            (
-                self.get_gyro_x(i),
-                self.get_gyro_y(i) * c,
-                self.get_gyro_z(i) * c,
-            )
-            for i in range(3)
-        ]
-
-    @property
-    def gyro_in_deg(self):
-        c = 0.06103
-        c2 = c * self._ime_yz_coeff
-        return [
-            (
-                self.get_gyro_x(i) * c,
-                self.get_gyro_y(i) * c2,
-                self.get_gyro_z(i) * c2,
-            )
-            for i in range(3)
-        ]
-
-    @property
-    def gyro_in_rad(self):
-        c = 0.0001694 * 3.1415926536
-        c2 = c * self._ime_yz_coeff
-        return [
-            (
-                self.get_gyro_x(i) * c,
-                self.get_gyro_y(i) * c2,
-                self.get_gyro_z(i) * c2,
-            )
-            for i in range(3)
-        ]
-
-    @property
-    def gyro_in_rot(self):
-        c = 0.0001694
-        c2 = c * self._ime_yz_coeff
-        return [
-            (
-                self.get_gyro_x(i) * c,
-                self.get_gyro_y(i) * c2,
-                self.get_gyro_z(i) * c2,
             )
             for i in range(3)
         ]

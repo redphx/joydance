@@ -1,9 +1,11 @@
-from .constants import JOYCON_VENDOR_ID, JOYCON_PRODUCT_IDS
-from .constants import JOYCON_L_PRODUCT_ID, JOYCON_R_PRODUCT_ID
-import hid
-import time
 import threading
+import time
 from typing import Optional
+
+import hid
+
+from .constants import (JOYCON_L_PRODUCT_ID, JOYCON_PRODUCT_IDS,
+                        JOYCON_R_PRODUCT_ID, JOYCON_VENDOR_ID)
 
 # TODO: disconnect, power off sequence
 
@@ -38,7 +40,6 @@ class JoyCon:
         self._input_report = bytes(self._INPUT_REPORT_SIZE)
         self._packet_number = 0
         self.set_accel_calibration((0, 0, 0), (1, 1, 1))
-        self.set_gyro_calibration((0, 0, 0), (1, 1, 1))
 
         # connect to joycon
         self._joycon_device = self._open(vendor_id, product_id, serial=serial)
@@ -162,16 +163,6 @@ class JoyCon:
                 self._to_int16le_from_2bytes(imu_cal[10], imu_cal[11]),
             )
         )
-        self.set_gyro_calibration((
-                self._to_int16le_from_2bytes(imu_cal[12], imu_cal[13]),
-                self._to_int16le_from_2bytes(imu_cal[14], imu_cal[15]),
-                self._to_int16le_from_2bytes(imu_cal[16], imu_cal[17]),
-            ), (
-                self._to_int16le_from_2bytes(imu_cal[18], imu_cal[19]),
-                self._to_int16le_from_2bytes(imu_cal[20], imu_cal[21]),
-                self._to_int16le_from_2bytes(imu_cal[22], imu_cal[23]),
-            )
-        )
 
     def _read_stick_calibration_data(self):
         user_stick_cal_addr = 0x8012 if self.is_left() else 0x801D
@@ -222,17 +213,6 @@ class JoyCon:
 
     def __del__(self):
         self._close()
-
-    def set_gyro_calibration(self, offset_xyz=None, coeff_xyz=None):
-        if offset_xyz:
-            self._GYRO_OFFSET_X, \
-            self._GYRO_OFFSET_Y, \
-            self._GYRO_OFFSET_Z = offset_xyz
-        if coeff_xyz:
-            cx, cy, cz = coeff_xyz
-            self._GYRO_COEFF_X = 0x343b / cx if cx != 0x343b else 1
-            self._GYRO_COEFF_Y = 0x343b / cy if cy != 0x343b else 1
-            self._GYRO_COEFF_Z = 0x343b / cz if cz != 0x343b else 1
 
     def set_accel_calibration(self, offset_xyz=None, coeff_xyz=None):
         if offset_xyz and coeff_xyz:
@@ -414,30 +394,6 @@ class JoyCon:
             input_report[18 + sample_idx * 12])
         return data * self._ACCEL_COEFF_Z * (1 if self.is_left() else -1)
 
-    def get_gyro_x(self, sample_idx=0):
-        if sample_idx not in (0, 1, 2):
-            raise IndexError('sample_idx should be between 0 and 2')
-        data = self._to_int16le_from_2bytes(
-            self._input_report[19 + sample_idx * 12],
-            self._input_report[20 + sample_idx * 12])
-        return (data - self._GYRO_OFFSET_X) * self._GYRO_COEFF_X
-
-    def get_gyro_y(self, sample_idx=0):
-        if sample_idx not in (0, 1, 2):
-            raise IndexError('sample_idx should be between 0 and 2')
-        data = self._to_int16le_from_2bytes(
-            self._input_report[21 + sample_idx * 12],
-            self._input_report[22 + sample_idx * 12])
-        return (data - self._GYRO_OFFSET_Y) * self._GYRO_COEFF_Y
-
-    def get_gyro_z(self, sample_idx=0):
-        if sample_idx not in (0, 1, 2):
-            raise IndexError('sample_idx should be between 0 and 2')
-        data = self._to_int16le_from_2bytes(
-            self._input_report[23 + sample_idx * 12],
-            self._input_report[24 + sample_idx * 12])
-        return (data - self._GYRO_OFFSET_Z) * self._GYRO_COEFF_Z
-
     def get_status(self) -> dict:
         return {
             "battery": {
@@ -490,27 +446,7 @@ class JoyCon:
                 "y": self.get_accel_y(),
                 "z": self.get_accel_z(),
             },
-            "gyro": {
-                "x": self.get_gyro_x(),
-                "y": self.get_gyro_y(),
-                "z": self.get_gyro_z(),
-            },
         }
-
-    def set_player_lamp_on(self, on_pattern: int):
-        self._write_output_report(
-            b'\x01', b'\x30',
-            (on_pattern & 0xF).to_bytes(1, byteorder='little'))
-
-    def set_player_lamp_flashing(self, flashing_pattern: int):
-        self._write_output_report(
-            b'\x01', b'\x30',
-            ((flashing_pattern & 0xF) << 4).to_bytes(1, byteorder='little'))
-
-    def set_player_lamp(self, pattern: int):
-        self._write_output_report(
-            b'\x01', b'\x30',
-            pattern.to_bytes(1, byteorder='little'))
 
     def disconnect_device(self):
         self._write_output_report(b'\x01', b'\x06', b'\x00')
