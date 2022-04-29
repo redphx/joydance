@@ -354,12 +354,15 @@ class JoyCon:
 
     def get_accels(self):
         input_report = bytes(self._input_report)
+        accels = []
 
-        x = self.get_accel_x(input_report)
-        y = self.get_accel_y(input_report)
-        z = self.get_accel_z(input_report)
+        for idx in range(3):
+            x = self.get_accel_x(input_report, sample_idx=idx)
+            y = self.get_accel_y(input_report, sample_idx=idx)
+            z = self.get_accel_z(input_report, sample_idx=idx)
+            accels.append((x, y, z))
 
-        return (x, y, z)
+        return accels
 
     def get_accel_x(self, input_report=None, sample_idx=0):
         if not input_report:
@@ -441,11 +444,7 @@ class JoyCon:
                     "vertical": self.get_stick_right_vertical(),
                 },
             },
-            "accel": {
-                "x": self.get_accel_x(),
-                "y": self.get_accel_y(),
-                "z": self.get_accel_z(),
-            },
+            "accel": self.get_accels(),
         }
 
     def disconnect_device(self):
