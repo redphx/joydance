@@ -11,8 +11,8 @@ from enum import Enum
 import aiohttp
 import hid
 from aiohttp import WSMsgType, web
-from pyjoycon import ButtonEventJoyCon, JoyCon
-from pyjoycon.constants import JOYCON_PRODUCT_IDS, JOYCON_VENDOR_ID
+from pycon import ButtonEventJoyCon, JoyCon
+from pycon.constants import JOYCON_PRODUCT_IDS, JOYCON_VENDOR_ID
 
 from joydance import JoyDance, PairingState
 from joydance.constants import (DEFAULT_CONFIG, JOYDANCE_VERSION,
