@@ -1,4 +1,4 @@
-import asyncio
+import threading
 import time
 from typing import Optional, Tuple
 
@@ -47,7 +47,9 @@ class JoyCon:
         self._setup_sensors()
 
         # start talking with the joycon in a daemon thread
-        asyncio.run(self._update_input_report())
+        self._update_input_report_thread = threading.Thread(target=self._update_input_report)
+        self._update_input_report_thread.setDaemon(True)
+        self._update_input_report_thread.start()
 
     def _open(self, vendor_id, product_id, serial):
         try:
@@ -113,7 +115,7 @@ class JoyCon:
 
         return report[7:size + 7]
 
-    async def _update_input_report(self):  # daemon thread
+    def _update_input_report(self):  # daemon thread
         try:
             while self._joycon_device:
                 report = [0]
