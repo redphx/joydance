@@ -11,12 +11,12 @@ from enum import Enum
 import aiohttp
 import hid
 from aiohttp import WSMsgType, web
-from pycon import ButtonEventJoyCon, JoyCon
-from pycon.constants import JOYCON_PRODUCT_IDS, JOYCON_VENDOR_ID
 
 from joydance import JoyDance, PairingState
 from joydance.constants import (DEFAULT_CONFIG, JOYDANCE_VERSION,
                                 WsSubprotocolVersion)
+from pycon import ButtonEventJoyCon, JoyCon
+from pycon.constants import JOYCON_PRODUCT_IDS, JOYCON_VENDOR_ID
 
 logging.getLogger('asyncio').setLevel(logging.WARNING)
 

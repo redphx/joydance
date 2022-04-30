@@ -1,6 +1,6 @@
 import asyncio
 import time
-from typing import Optional
+from typing import Optional, Tuple
 
 import hid
 
@@ -15,13 +15,13 @@ class JoyCon:
     _INPUT_REPORT_PERIOD = 0.015
     _RUMBLE_DATA = b'\x00\x01\x40\x40\x00\x01\x40\x40'
 
-    vendor_id  : int
-    product_id : int
-    serial     : Optional[str]
+    vendor_id: int
+    product_id: int
+    serial: Optional[str]
     simple_mode: bool
-    color_body : (int, int, int)
-    color_btn  : (int, int, int)
-    stick_cal  : [int, int, int, int, int, int, int, int]
+    color_body: Tuple[int, int, int]
+    color_btn: Tuple[int, int, int]
+    stick_cal: Tuple[int, int, int, int, int, int, int, int]
 
     def __init__(self, vendor_id: int, product_id: int, serial: str = None, simple_mode=False):
         if vendor_id != JOYCON_VENDOR_ID:
@@ -30,9 +30,9 @@ class JoyCon:
         if product_id not in JOYCON_PRODUCT_IDS:
             raise ValueError(f'product_id is invalid: {product_id!r}')
 
-        self.vendor_id   = vendor_id
-        self.product_id  = product_id
-        self.serial      = serial
+        self.vendor_id = vendor_id
+        self.product_id = product_id
+        self.serial = serial
         self.simple_mode = simple_mode  # TODO: It's for reporting mode 0x3f
 
         # setup internal state
@@ -85,7 +85,7 @@ class JoyCon:
         ]))
         self._packet_number = (self._packet_number + 1) & 0xF
 
-    def _send_subcmd_get_response(self, subcommand, argument) -> (bool, bytes):
+    def _send_subcmd_get_response(self, subcommand, argument) -> Tuple[bool, bytes]:
         # TODO: handle subcmd when daemon is running
         self._write_output_report(b'\x01', subcommand, argument)
 
@@ -131,6 +131,8 @@ class JoyCon:
 
     def _read_joycon_data(self):
         color_data = self._spi_flash_read(0x6050, 6)
+        self.color_body = tuple(color_data[:3])
+        self.color_btn = tuple(color_data[3:])
 
         self._read_stick_calibration_data()
 
@@ -147,19 +149,15 @@ class JoyCon:
             # print(f"Calibrate {self.serial} IME with factory data")
             imu_cal = self._spi_flash_read(0x6020, 24)
 
-        self.color_body = tuple(color_data[:3])
-        self.color_btn  = tuple(color_data[3:])
-
         self.set_accel_calibration((
-                self._to_int16le_from_2bytes(imu_cal[ 0], imu_cal[ 1]),
-                self._to_int16le_from_2bytes(imu_cal[ 2], imu_cal[ 3]),
-                self._to_int16le_from_2bytes(imu_cal[ 4], imu_cal[ 5]),
-            ), (
-                self._to_int16le_from_2bytes(imu_cal[ 6], imu_cal[ 7]),
-                self._to_int16le_from_2bytes(imu_cal[ 8], imu_cal[ 9]),
-                self._to_int16le_from_2bytes(imu_cal[10], imu_cal[11]),
-            )
-        )
+            self._to_int16le_from_2bytes(imu_cal[0], imu_cal[1]),
+            self._to_int16le_from_2bytes(imu_cal[2], imu_cal[3]),
+            self._to_int16le_from_2bytes(imu_cal[4], imu_cal[5]),
+        ), (
+            self._to_int16le_from_2bytes(imu_cal[6], imu_cal[7]),
+            self._to_int16le_from_2bytes(imu_cal[8], imu_cal[9]),
+            self._to_int16le_from_2bytes(imu_cal[10], imu_cal[11]),
+        ))
 
     def _read_stick_calibration_data(self):
         user_stick_cal_addr = 0x8012 if self.is_left() else 0x801D
@@ -213,15 +211,12 @@ class JoyCon:
 
     def set_accel_calibration(self, offset_xyz=None, coeff_xyz=None):
         if offset_xyz and coeff_xyz:
-            self._ACCEL_OFFSET_X, \
-            self._ACCEL_OFFSET_Y, \
-            self._ACCEL_OFFSET_Z = offset_xyz
+            self._ACCEL_OFFSET_X, self._ACCEL_OFFSET_Y, self._ACCEL_OFFSET_Z = offset_xyz
 
             cx, cy, cz = coeff_xyz
             self._ACCEL_COEFF_X = (1.0 / (cx - self._ACCEL_OFFSET_X)) * 4.0
             self._ACCEL_COEFF_Y = (1.0 / (cy - self._ACCEL_OFFSET_Y)) * 4.0
             self._ACCEL_COEFF_Z = (1.0 / (cz - self._ACCEL_OFFSET_Z)) * 4.0
-
 
     def get_actual_stick_value(self, pre_cal, orientation):  # X/Horizontal = 0, Y/Vertical = 1
         diff = pre_cal - self.stick_cal[2 + orientation]
