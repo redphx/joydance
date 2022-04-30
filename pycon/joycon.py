@@ -1,4 +1,4 @@
-import threading
+import asyncio
 import time
 from typing import Optional
 
@@ -47,10 +47,7 @@ class JoyCon:
         self._setup_sensors()
 
         # start talking with the joycon in a daemon thread
-        self._update_input_report_thread \
-            = threading.Thread(target=self._update_input_report)
-        self._update_input_report_thread.setDaemon(True)
-        self._update_input_report_thread.start()
+        asyncio.run(self._update_input_report())
 
     def _open(self, vendor_id, product_id, serial):
         try:
@@ -92,7 +89,7 @@ class JoyCon:
         # TODO: handle subcmd when daemon is running
         self._write_output_report(b'\x01', subcommand, argument)
 
-        report = self._read_input_report()
+        report = [0]
         while report[0] != 0x21:  # TODO, avoid this, await daemon instead
             report = self._read_input_report()
 
@@ -114,12 +111,12 @@ class JoyCon:
             raise IOError("Something else than the expected ACK was recieved!")
         assert report[2:7] == argument, (report[2:5], argument)
 
-        return report[7:size+7]
+        return report[7:size + 7]
 
-    def _update_input_report(self):  # daemon thread
+    async def _update_input_report(self):  # daemon thread
         try:
             while self._joycon_device:
-                report = self._read_input_report()
+                report = [0]
                 # TODO, handle input reports of type 0x21 and 0x3f
                 while report[0] != 0x30:
                     report = self._read_input_report()
