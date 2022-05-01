@@ -1,5 +1,5 @@
-import threading
 import time
+from threading import Thread
 from typing import Optional, Tuple
 
 import hid
@@ -47,9 +47,7 @@ class JoyCon:
         self._setup_sensors()
 
         # start talking with the joycon in a daemon thread
-        self._update_input_report_thread = threading.Thread(target=self._update_input_report)
-        self._update_input_report_thread.setDaemon(True)
-        self._update_input_report_thread.start()
+        Thread(target=self._update_input_report, daemon=True).start()
 
     def _open(self, vendor_id, product_id, serial):
         try:
@@ -125,11 +123,15 @@ class JoyCon:
 
                 self._input_report = report
 
-                for callback in self._input_hooks:
-                    callback(self)
+                # Call input hooks in a different thread
+                Thread(target=self._input_hook_caller, daemon=True).start()
         except OSError:
             print('connection closed')
             pass
+
+    def _input_hook_caller(self):
+        for callback in self._input_hooks:
+            callback(self)
 
     def _read_joycon_data(self):
         color_data = self._spi_flash_read(0x6050, 6)
