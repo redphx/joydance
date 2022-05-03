@@ -53,7 +53,6 @@ pip3 install -r requirements.txt
   1. Linux users may need to use [`hid`](https://github.com/apmorton/pyhidapi) instead of [`hidapi`](https://github.com/trezor/cython-hidapi) (not sure why `hidapi` couldn't find Joy-Cons on Linux).
   ```
   pip3 uninstall hidapi
-
   sudo apt install libhidapi-dev
   pip3 install hid
   ```
