@@ -69,7 +69,6 @@ class JoyDance:
         self.available_shortcuts = set()
 
         self.accel_data = []
-        self.last_accel = (0, 0, 0)
 
         self.ws = None
         self.disconnected = False
@@ -242,34 +241,46 @@ class JoyDance:
         async for message in self.ws:
             await self.on_message(message)
 
+    async def sleep_approx(self, target_duration):
+        tmp_duration = target_duration
+        x = 0.3
+        start = time.time()
+        while True:
+            tmp_duration = tmp_duration * x
+            await asyncio.sleep(tmp_duration)
+
+            dt = time.time() - start
+            if dt >= target_duration:
+                break
+
+            tmp_duration = target_duration - dt
+
     async def tick(self):
-        sleep_duration = FRAME_DURATION * 0.75
-        last_time = time.time()
+        sleep_duration = FRAME_DURATION
         frames = 0
 
         while True:
             if self.disconnected:
                 break
 
-            # Make sure it runs at exactly 60 FPS
-            while True:
-                time_now = time.time()
-                dt = time_now - last_time
-                if dt >= FRAME_DURATION:
-                    break
-            last_time = time_now
-            frames = frames + 1 if frames < 3 else 1
-
             if not self.should_start_accelerometer:
-                await asyncio.sleep(sleep_duration),
+                frames = 0
+                await asyncio.sleep(sleep_duration)
                 continue
 
-            await asyncio.gather(
-                asyncio.sleep(sleep_duration),
-                self.collect_accelerometer_data(frames),
-            )
+            last_time = time.time()
+            frames = frames + 1 if frames < 3 else 1
 
-    async def collect_accelerometer_data(self, frames):
+            await asyncio.gather(
+                self.sleep_approx(sleep_duration),
+                self.collect_accelerometer_data(),
+            )
+            await self.send_accelerometer_data(frames)
+
+            dt = time.time() - last_time
+            sleep_duration = FRAME_DURATION - (dt - sleep_duration)
+
+    async def collect_accelerometer_data(self):
         if self.disconnected:
             return
 
@@ -278,23 +289,15 @@ class JoyDance:
             return
 
         try:
-            start = time.time()
-            max_runtime = FRAME_DURATION * 0.5
-            while time.time() - start < max_runtime:
-                # Make sure accelerometer axes are changed
-                accel = self.joycon.get_accels()  # (x, y, z)
-                if accel != self.last_accel:
-                    self.last_accel = accel
-                    break
+            accels = self.joycon.get_accels()  # (x, y, z)
 
             # Accelerator axes on phone & Joy-Con are different so we need to swap some axes
             # https://github.com/dekuNukem/Nintendo_Switch_Reverse_Engineering/blob/master/imu_sensor_notes.md
+            accel = accels[2]
             x = accel[1] * -1
             y = accel[0]
             z = accel[2]
-
             self.accel_data.append([x, y, z])
-            await self.send_accelerometer_data(frames),
         except OSError:
             self.disconnect()
             return

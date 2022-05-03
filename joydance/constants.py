@@ -15,6 +15,7 @@ WS_SUBPROTOCOLS[WsSubprotocolVersion.V1.value] = 'v1.phonescoring.jd.ubisoft.com
 WS_SUBPROTOCOLS[WsSubprotocolVersion.V2.value] = 'v2.phonescoring.jd.ubisoft.com'
 
 FRAME_DURATION = 1 / 60
+SEND_FREQ_MS = 0.005
 ACCEL_ACQUISITION_FREQ_HZ = 60  # Hz
 ACCEL_ACQUISITION_LATENCY = 40  # ms
 ACCEL_MAX_RANGE = 8  # ±G
@@ -38,6 +39,7 @@ class Command(Enum):
 
     BACK = 'SHORTCUT_BACK'
     CHANGE_DANCERCARD = 'SHORTCUT_CHANGE_DANCERCARD'
+    DONT_SHOW_ANYMORE = 'SHORTCUT_DONT_SHOW_ANYMORE'
     FAVORITE = 'SHORTCUT_FAVORITE'
     GOTO_SONGSTAB = 'SHORTCUT_GOTO_SONGSTAB'
     SKIP = 'SHORTCUT_SKIP'
@@ -109,6 +111,7 @@ SHORTCUT_MAPPING = {
         Command.UPLAY,
     ],
     JoyConButton.PLUS: [
+        Command.DONT_SHOW_ANYMORE,
         Command.FAVORITE,
         Command.PAUSE,
         Command.PLAYLIST_RENAME,
