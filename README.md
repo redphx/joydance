@@ -128,14 +128,17 @@ pip3 install -r requirements.txt
 1. **What is the correct way to hold a Joy-Con?**  
   Hold the Joy-Con (L)/(R) in your right hand, with your palm touching the back of Joy-Con.
   
-2. **How to control with Joy-Con (L)?**
-    - Up = X
-    - Right = A
-    - Down = B
-    - Left = Y
-    - L = R
-    - ZL = ZR
-    - Minus = Plus
+2. **How to control with Joy-Con (L)?**  
+
+    | Joy-Con (L) | Joy-Con (R) |
+    |-------------|-------------|
+    | Up          | X           |
+    | Right       | A           |
+    | Down        | B           |
+    | Left        | Y           |
+    | L           | R           |
+    | ZL          | ZR          |
+    | Minus       | Plus        |
 
 3. **How to exit JoyDance?**  
   Press `Ctrl + C` two times or close the Terminal window.
