@@ -1,6 +1,6 @@
 from enum import Enum
 
-JOYDANCE_VERSION = '0.4'
+JOYDANCE_VERSION = '0.5'
 UBI_APP_ID = '210da0fb-d6a5-4ed1-9808-01e86f0de7fb'
 UBI_SKU_ID = 'jdcompanion-android'
 
