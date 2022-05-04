@@ -126,7 +126,7 @@ pip3 install -r requirements.txt
 
 ## FAQ
 1. **What is the correct way to hold a Joy-Con?**  
-  Hold the Joy-Con (L)/(R) in your right hand, with your palm touching the back of Joy-Con.
+  Please follow these images for [Joy-Con (L)](https://static.wikia.nocookie.net/justdance/images/2/20/Hold_joy-constrap_blue.png) and [Joy-Con (R)](https://static.wikia.nocookie.net/justdance/images/8/8a/Hold_joy-constrap_04.png).  
   
 2. **How to control with Joy-Con (L)?**  
 
