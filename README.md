@@ -27,7 +27,7 @@ It pretends to be the [Just Dance Controller app](https://play.google.com/store/
 
 ## Tested on
 - MacOS Catalina 10.15 with [TP-Link Bluetooth 4.0 Nano USB Adapter UB400](https://www.tp-link.com/us/home-networking/usb-adapter/ub400/).
-- Raspberry Pi Zero 2 W (Bulleye, kernel 5.15) with [MPOW BH519A Bluetooth 5.1 USB Adapter](https://www.xmpow.com/products/mpow-bh519a-bluetooth-5-1-usb-adapter-for-pc). Tested with 2 Joy-Cons and it worked just fine.
+- Raspberry Pi Zero 2 W (Bullseye, kernel 5.15) with [MPOW BH519A Bluetooth 5.1 USB Adapter](https://www.xmpow.com/products/mpow-bh519a-bluetooth-5-1-usb-adapter-for-pc). Tested with 2 Joy-Cons and it worked just fine.
   
 
 ## Requirements
