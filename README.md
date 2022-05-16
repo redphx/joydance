@@ -31,7 +31,7 @@ It pretends to be the [Just Dance Controller app](https://play.google.com/store/
   
 
 ## Requirements
-- PC/Mac/Linux with bluetooth support.
+- PC/Mac/Linux with bluetooth support. Doesn't work with Chrome OS/Crostini ([#15](../../issues/15)).
 - [Python 3.7+](https://www.python.org) and [pip](https://pip.pypa.io/en/stable/installation/) installed.
 - 1 to 6 Joy-Cons.
 - It's **RECOMMENDED** to:
