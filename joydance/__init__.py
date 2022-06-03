@@ -286,15 +286,8 @@ class JoyDance:
             return
 
         try:
-            accels = self.joycon.get_accels()  # (x, y, z)
-
-            # Accelerator axes on phone & Joy-Con are different so we need to swap some axes
-            # https://github.com/dekuNukem/Nintendo_Switch_Reverse_Engineering/blob/master/imu_sensor_notes.md
-            for accel in accels:
-                x = accel[1] * -1
-                y = accel[0]
-                z = accel[2]
-                self.accel_data.append([x, y, z])
+            accels = self.joycon.get_accels()  # ([x, y, z],...)
+            self.accel_data += accels
         except OSError:
             self.disconnect()
             return
