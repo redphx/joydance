@@ -1,3 +1,5 @@
 websockets==10.2
 aiohttp==3.8.1
 hidapi==0.11.2
+pythonnet==3.0.0a2; platform_system == "Windows"
+pywebview==3.6.3
