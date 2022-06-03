@@ -118,8 +118,6 @@ class JoyDance:
                     raise Exception('ERROR: Invalid pairing code!')
 
                 json_body = await resp.json()
-                import pprint
-                pprint.pprint(json_body)
 
                 self.pairing_url = json_body['pairingUrl'].replace('https://', 'wss://')
                 if not self.pairing_url.endswith('/'):
@@ -128,7 +126,6 @@ class JoyDance:
 
                 self.tls_certificate = json_body['tlsCertificate']
 
-                print(self.pairing_url)
                 self.requires_punch_pairing = json_body.get('requiresPunchPairing', False)
 
     async def send_initiate_punch_pairing(self):
@@ -165,8 +162,8 @@ class JoyDance:
 
     async def send_message(self, __class, data={}):
         ''' Send JSON message to server '''
-        if __class != 'JD_PhoneScoringData':
-            print('>>>', __class, data)
+        # if __class != 'JD_PhoneScoringData':
+        #    print('>>>', __class, data)
 
         msg = {'root': {'__class': __class}}
         if data:
@@ -181,7 +178,7 @@ class JoyDance:
 
     async def on_message(self, message):
         message = json.loads(message)
-        print('<<<', message)
+        # print('<<<', message)
 
         __class = message['__class']
         if __class == 'JD_PhoneDataCmdHandshakeContinue':
