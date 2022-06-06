@@ -27,21 +27,20 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+#HIDDEN IMPORT libs.win64._psmove
 
 import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'build'))
-
 import time
 
-if (os.name == 'nt'):       from build.win64 import psmove
-elif (os.name == 'Darwin'): from build.macos import psmove
+if (os.name == 'nt'): from libs.win64 import psmove
+elif (os.name == 'Darwin'): from libs.macos import psmove
 else:                       raise Exception("Platform unsupported. Sorry!")
 
 moves = [psmove.PSMove(x) for x in range(psmove.count_connected())]
 
 if not moves:
-    print('No controller connected');
+    print('No controller connected')
     sys.exit(1)
 
 for move in moves:

@@ -1,5 +1,7 @@
 # JoyDance
 
+Python 3.10.4 REQUIRED.
+
 ![image](https://user-images.githubusercontent.com/96280/163298419-6279f338-069e-4302-971f-b9d2e5fc9f7a.png)
 
 ## Demo
