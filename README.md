@@ -1,4 +1,4 @@
-# JoyDance
+# JoyDance Python312
 
 ![image](https://user-images.githubusercontent.com/96280/163298419-6279f338-069e-4302-971f-b9d2e5fc9f7a.png)
 
@@ -19,7 +19,7 @@ https://youtu.be/f_1IkUHFdH8
 | 2020-2022    | ✅          | ✅       | ✅    | ✅  | ✅    |    |       |
 | 2016-2019 ⚠️ |             | ✅       | ✅    | ✅  |       | ✅ | ✅    |
 
-⚠️ **Important**: Can't use buttons on Joy-Con to navigate the UI in JD 2016-2019 (you'll have to use controllers/keyboard). See [#6](../../issues/6).
+⚠️ **Important**: Can't use buttons on Joy-Con to navigate the UI in JD 2016-2019 (you'll have to use controllers/keyboard). See [#6](https://github.com/redphx/joydance/issues/6).
 
   
 ## How does it work?
@@ -31,8 +31,8 @@ It pretends to be the [Just Dance Controller app](https://play.google.com/store/
   
 
 ## Requirements
-- PC/Mac/Linux with bluetooth support. Doesn't work with Chrome OS/Crostini ([#15](../../issues/15)).
-- [Python 3.7+](https://www.python.org) and [pip](https://pip.pypa.io/en/stable/installation/) installed.
+- PC/Mac/Linux with bluetooth support. Doesn't work with Chrome OS/Crostini ([#15](https://github.com/redphx/joydance/issues/15)).
+- [Python 3.11+](https://www.python.org) and [pip](https://pip.pypa.io/en/stable/installation/) installed.
 - 1 to 6 Joy-Cons.
 - It's **RECOMMENDED** to:
   - Use a Bluetooth dongle, because built-in Bluetooth sucks (or you will get disconnected constantly while playing). Make sure you buy a dongle with game controllers support, not just for audio devices. Not all dongles support Mac/Linux, so remember to check compatibility before buying.
@@ -40,11 +40,8 @@ It pretends to be the [Just Dance Controller app](https://play.google.com/store/
 
 ## Installation
 
-1. Download [the latest version](https://github.com/redphx/joydance/releases/latest/) and extract it into a folder.
-2. Open that folder in Terminal/Command Prompt, then run this command:
-```
-pip3 install -r requirements.txt
-```
+1. Download [the latest version](https://github.com/lorenzwan/joydance-python312/releases/latest/) and extract it into a folder.
+2. Run `install.bat`
   
 #### Extra steps for Linux users
 <details>
@@ -88,14 +85,7 @@ pip3 install -r requirements.txt
 
 2. Connect your PC/Mac/Linux to the same Wi-Fi or LAN network as your game console. For Stadia you just need to connect to the internet.
 
-3. Run this command:
-    ```
-    python3 dance.py
-    ```
-    or
-    ```
-    python dance.py
-    ```
+3. Run `dance.bat`
 
 4. Open http://localhost:32623 (not https://...) in a web browser (32623 = DANCE). You can also open JoyDance on another device (connected to the same network) with this link: `http://[JOYDANCE_DEVICE_IP]:32623` (for example: `http://192.168.1.100:32623`).
 
