@@ -1,0 +1,96 @@
+name: Build, upload artifact and create release
+
+on:
+  push:
+    tags:
+      - "*.*.*"
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review, labeled]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: pip3 install -r requirements.txt
+
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+
+      - name: Create PyInstaller spec file
+        run: pyi-makespec --onefile dance.py
+
+      - name: Edit PyInstaller spec file to include static folder
+        shell: pwsh
+        run: |
+          $specFile = Get-Content dance.spec
+          $specFile = $specFile -replace "datas=\[\]", "datas=[('static', 'static')]"
+          $specFile | Set-Content dance.spec
+
+      - name: Build executable
+        run: pyinstaller dance.spec
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: joydance-win64-executable
+          path: dist/dance.exe
+
+  test_run_artifact:
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: joydance-win64-executable
+          path: ./dist
+      - name: Run the artifact
+        run: |
+          Start-Process -FilePath "./dist/dance.exe"
+          Start-Sleep -Seconds 30 # Run for 30 seconds
+          Stop-Process -Name "dance" # Replace with the actual process name if different
+        shell: pwsh
+
+  create_release:
+    needs: test_run_artifact
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.ref, 'refs/tags/') }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine Tags to use for changelog
+        id: determine_tags
+        run: |
+          # Get the latest tag
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+
+          # Get the tag before the latest tag
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 $LATEST_TAG^)
+
+          echo "Latest tag: $LATEST_TAG"
+          echo "Previous tag: $PREVIOUS_TAG"
+          echo "PREVIOUS_TAG=$PREVIOUS_TAG" >> $GITHUB_ENV
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+
+      - name: Create Changelog
+        run: git log --pretty=format:"%h - %s (@%an)" $PREVIOUS_TAG..$LATEST_TAG > ${{ github.workspace }}-${{ github.env.LATEST_TAG }}-CHANGELOG.txt
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: joydance-win64-executable
+          path: ./dist
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: ./dist/dance.exe
+          body_path: ${{ github.workspace }}-${{ github.env.LATEST_TAG }}-CHANGELOG.txt
+          tag_name: ${{ github.env.LATEST_TAG }}
