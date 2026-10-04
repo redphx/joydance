@@ -419,7 +419,8 @@ class JoyDance:
                     sock=self.console_conn,
                     ssl=ssl_context,
                     ping_timeout=None,
-                    server_hostname=server_hostname
+                    server_hostname=server_hostname,
+                    max_size=None,
             ) as websocket:
                 try:
                     self.ws = websocket
